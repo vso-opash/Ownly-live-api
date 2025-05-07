@@ -3282,6 +3282,920 @@ function removeWatcher(req, res) {
     }
 }
 
+// function addMR(req, res) {
+//     console.log('req.body :: addMR => ', req.body);
+//     console.log('req.body.latitude :: addMR => ', req.body.latitude);
+//     console.log('req.body.longitude :: addMR => ', req.body.longitude);
+//     var referral_code = (typeof req.body.referralCode != 'undefined') ? req.body.referralCode : '';
+//     var firstname = (typeof req.body.firstname != 'undefined') ? req.body.firstname : '';
+//     var email = (typeof req.body.email != 'undefined') ? req.body.email : '';
+//     var mobile_no = (typeof req.body.mobile_no != 'undefined') ? req.body.mobile_no : '';
+//     var request_overview = (typeof req.body.request_overview != 'undefined') ? req.body.request_overview : '';
+//     var request_detail = (typeof req.body.request_detail != 'undefined') ? req.body.request_detail : '';
+//     var mail_title = request_overview + ' - Quote Request';
+//     var agency_id = (typeof req.body.agency_id != 'undefined') ? mongoose.Types.ObjectId(req.body.agency_id) : '';
+//     var trader_id = (typeof req.body.trader_id != 'undefined') ? mongoose.Types.ObjectId(req.body.trader_id) : '';
+//     var request_type = (trader_id && trader_id != '') ? 0 : 1;
+//     var created_by_role = (typeof req.body.created_by_role != 'undefined') ? mongoose.Types.ObjectId(req.body.created_by_role) : mongoose.Types.ObjectId(Config.TENANT);
+//     var created_by = (typeof req.body.created_by != 'undefined') ? mongoose.Types.ObjectId(req.body.created_by) : '';
+//     var budget = (typeof req.body.budget != 'undefined') ? req.body.budget : 0;
+//     var due_date = (typeof req.body.due_date != 'undefined') ? moment(req.body.due_date).format('YYYY-MM-DD') : '';
+//     var req_status = (typeof req.body.req_status != 'undefined') ? req.body.req_status : 1;
+//     var category_id = (typeof req.body.category_id != 'undefined') ? mongoose.Types.ObjectId(req.body.category_id) : '';
+//     var is_forward = (created_by_role == Constant.AGENT || created_by_role == Constant.OWN_AGENCY) ? true : false;
+//     var address = (typeof req.body.address != 'undefined') ? req.body.address : '';
+//     var longitude = (typeof req.body.longitude != 'undefined') ? req.body.longitude : '';
+//     var latitude = (typeof req.body.latitude != 'undefined') ? req.body.latitude : '';
+//     var watchersList = (typeof req.body.watchers_list != 'undefined') ? req.body.watchers_list : [];
+//     var images = (typeof req.body.images != 'undefined') ? req.body.images : [];
+//     var activation_code = Math.random().toString(36).substring(2, 10) + Math.random().toString(36).substring(2, 10);
+//     var newuserId = [];
+//     var user_id = '';
+//     (async () => {
+//         // console.log("step1");
+//         if (email && category_id && email != '' && category_id != '') {
+//             // console.log("step2");
+//             let userRecord = await User.findOne({ email: email }, { email: 1, _id: 1 });
+//             //console.log("userRecord", userRecord);
+//             if (userRecord) {
+//                 user_id = userRecord._id
+//             } else {
+//                 console.log("New User");
+//                 //Add User, Send Mail to Consumer for Account Activation and Mail to Traders for new Job
+
+//                 // Add User Start
+//                 var userData = {
+//                     firstname: firstname,
+//                     email: email,
+//                     mobile_no: mobile_no,
+//                     activation_code: activation_code,
+//                     status: false,
+//                     is_deleted: false,
+//                     referedBy: trader_id
+//                 };
+//                 var UsersRecord = new User(userData);
+
+//                 // call the built-in save method to save to the database
+//                 newuserId = await UsersRecord.save();
+//                 //console.log("new added user is ", newuserId);
+//                 user_id = newuserId._id;
+//             }
+//             //console.log("user_id =>", user_id);
+//             if (user_id && user_id != '') {
+//                 console.log("calling;;;");
+//                 //Add MR and Send Mail to Traders for new Job
+//                 var mrData = {};
+//                 var addData = {};
+
+//                 var chars = "123456789";
+//                 var maintennceId = '';
+//                 for (var x = 0; x < 9; x++) {
+//                     var i = Math.floor(Math.random() * chars.length);
+//                     maintennceId += chars.charAt(i);
+//                 }
+//                 mrData.address = address;
+//                 mrData.request_id = maintennceId;
+//                 mrData.request_overview = request_overview;
+//                 mrData.request_detail = request_detail;
+//                 mrData.created_by = (created_by && created_by != '') ? mongoose.Types.ObjectId(created_by) : mongoose.Types.ObjectId(user_id);
+//                 mrData.forwarded_by = (created_by && created_by != '') ? mongoose.Types.ObjectId(created_by) : mongoose.Types.ObjectId(user_id);
+//                 mrData.budget = budget;
+//                 mrData.due_date = due_date;
+//                 mrData.req_status = req_status;
+//                 mrData.is_forward = is_forward;
+//                 mrData.categories_id = mongoose.Types.ObjectId(category_id);
+//                 mrData.request_type = request_type;
+//                 mrData.watchers_list = watchersList;
+//                 mrData.referral_code = referral_code;
+
+//                 if (images) {
+//                     var imagesListArr = [];
+//                     for (var i = 0; i < images.length; i++) {
+//                         if (images.indexOf(images[i].path) === -1) {
+//                             imagesListArr.push({ "path": images[i].path });
+//                         }
+//                     }
+//                     mrData.images = imagesListArr;
+//                 }
+
+//                 if (mrData.request_type == 1) {
+//                     mrData.original_budget = budget;
+//                     mrData.original_date = due_date;
+//                 }
+//                 if (agency_id && validator.isValidObject(agency_id))
+//                     mrData.agency_id = agency_id;
+//                 if (trader_id && validator.isValidObject(trader_id))
+//                     mrData.trader_id = trader_id;
+//                 if (created_by && validator.isValidObject(created_by))
+//                     mrData.created_by = created_by;
+//                 if (created_by_role && validator.isValidObject(created_by_role))
+//                     mrData.created_by_role = created_by_role;
+//                 //console.log("step6    ", mrData);
+
+//                 var options = {
+//                     method: 'GET',
+//                     url: 'https://api.psma.com.au/beta/v1/addresses',
+//                     qs: { perPage: '10', page: '1', addressString: address },
+//                     headers: { authorization: 'Z6Auyhh7JOaXfvandiUb0e95Mr92GfnY' }
+//                 };
+
+//                 await request(options, async function (error, response, body) {
+//                     if (response) {
+//                         var result = JSON.parse(body);
+//                         if (result && result.data && result.data[0] && result.data[0].addressId) {
+//                             addData.GNAFId = mrData.address_id = await result.data[0].addressId;
+//                             console.log("result.data[0].addressId    ", addData.GNAFId);
+//                         }
+//                     }
+//                     console.log('address :: addMR => ', address);
+//                     var address1 = escape(address);
+//                     var options = {
+//                         "method": "GET",
+//                         "hostname": "maps.googleapis.com",
+//                         "port": null,
+//                         "path": "/maps/api/geocode/json?address=" + address1 + "&key=AIzaSyCGWZqTcVNj2IeuAud3EsdL3ewktb0yCFo"
+//                     };
+//                     // console.log('options for google map API : addMR => ', options);
+//                     var req1 = await http.request(options, async function (res1) {
+//                         var chunks = [];
+//                         await res1.on("data", function (chunk) {
+//                             chunks.push(chunk);
+//                         });
+
+//                         await res1.on("end", async function () {
+//                             var body = Buffer.concat(chunks);
+//                             var address2 = body.toString();
+//                             var result = JSON.parse(address2).results;
+//                             // console.log('result :: data of google map api => ', result);
+//                             //console.log("result   ", JSON.stringify(JSON.parse(address2)));
+//                             if (result && result.length > 0) {
+//                                 const locData = result[0];
+//                                 // console.log("===========>   " ,  locData.address_components);
+//                                 if (locData.address_components && locData.address_components.length > 0) {
+//                                     locData.address_components.map(function (location_part) {
+//                                         if (location_part.types && location_part.types[0] && location_part.types[0] == 'administrative_area_level_1')
+//                                             mrData.suburb = location_part.long_name;
+//                                         if (location_part.types && location_part.types[0] && location_part.types[0] == 'postal_code')
+//                                             mrData.postcode = location_part.long_name;
+//                                     });
+//                                 }
+//                                 if (locData.geometry && locData.geometry.location && locData.geometry.location.lat && locData.geometry.location.lng) {
+//                                     mrData.latitude = await locData.geometry.location.lat;
+//                                     mrData.longitude = await locData.geometry.location.lng;
+//                                     // console.log("======================= ", mrData.latitude + "    " + mrData.longitude);
+
+//                                     mrData.location = await {
+//                                         coordinates: [locData.geometry.location.lng, locData.geometry.location.lat],
+//                                         type: 'Point'
+//                                     }
+//                                 }
+//                             }
+
+//                             var maintenance_id = '';
+//                             var maintenance = new maintenances(mrData);
+//                             //console.log("mr data    ", mrData);
+//                             await maintenance.save(async function (err5, maintenanaceData) {
+//                                 if (err5) {
+//                                     // console.log("err5     ", err5);
+//                                 } else {
+//                                     maintenance_id = await maintenanaceData._id;
+//                                     let createdByData;
+//                                     await User.findById(maintenanaceData.created_by, async function (createdByErr, createdByInfo) {
+//                                         console.log('createdByInfo => ', await createdByInfo);
+//                                         if (createdByErr) {
+//                                             console.log('createdByErr :: Error occured while retrieving data from users table => ', createdByErr);
+//                                         } else {
+//                                             createdByData = await createdByInfo
+//                                         }
+//                                     })
+//                                     var traderLog = {
+//                                         maintenance_id: mongoose.Types.ObjectId(maintenance_id)
+//                                     };
+//                                     var addTraderLog = new maintentenance_traders_log(traderLog);
+//                                     await addTraderLog.save(function (err_, traderLogs) {
+
+//                                     });
+
+
+//                                     if (newuserId && newuserId._id && newuserId._id != '') {
+//                                         console.log('newuserId => ');
+//                                         var mailOptions = {
+//                                             from: Config.EMAIL_FROM, // sender address
+//                                             to: email, // list of receivers
+//                                             // to: 'jerriranhard@yahoo.com', // list of receivers
+//                                             subject: 'Your Ownly Trade service request', // Subject line
+//                                             text: 'Your Ownly Trade service request', // plaintext body
+//                                             html: '<!doctype html>' +
+//                                                 '<html lang="en">' +
+//                                                 '<head>' +
+//                                                 '<meta charset="utf-8">' +
+//                                                 '<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">' +
+//                                                 '<link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">' +
+//                                                 '<title>Email </title>' +
+//                                                 '</head>' +
+//                                                 '<body>' +
+//                                                 '<table style="font-family:Roboto;max-width:800px;width:100%;border-radius:4px;margin:0 auto;border-spacing:0;background: #3b4856;display: block;">' +
+//                                                 '<tr>' +
+//                                                 '<td style="border:0;padding: 130px 0 180px 0px;background:#3b4856;border-spacing:0;text-align:center;background: url(' + Constant.STAGGING_URL + 'assets/images/img-001.jpg) no-repeat center 0;background-size:contain">' +
+//                                                 '<table style="width:90%;margin-left:auto;margin-right:auto;border-spacing:0;border-radius:4px;background:#fff;border-radius:10px;border-spacing:0">' +
+//                                                 '<tr>' +
+//                                                 '<td style="padding:20px; text-align:left;">' +
+//                                                 '<table style="width:100%; margin:0; border-spacing:0; border-spacing: 0;">' +
+//                                                 '<tr>' +
+//                                                 '<td style="color:#7C888D; font-size:15px; line-height:normal; padding-bottom:20px;">Dear ' + firstname + ',</td>' +
+//                                                 '</tr>' +
+//                                                 '<tr>' +
+//                                                 '<td style="color:#7C888D; font-size:15px; line-height:normal; padding-bottom:40px;">Thank you for placing your request through Australia’s newest Trade and Service platform, Ownly Trade. We are delighted to help you find the perfect Trader.</td>' +
+//                                                 '</tr>' +
+//                                                 '<tr>' +
+//                                                 '<td style="color:#7C888D; font-size:15px; line-height:normal; padding-bottom:40px;">Please <a href="' + Constant.PUBLIC_STAGGING_URL + 'consumer_account_activation/' + activation_code + '/' + maintenance_id + '"><b>click here</b></a> to activate your account ' + email + ' and stay up to date with your Trade Request.</td>' +
+//                                                 '</tr>' +
+//                                                 '<tr>' +
+//                                                 '<td style="color:#2E4255; font-size:18px; font-weight:700; line-height:normal; padding:0; margin:0;"><a target="_blank" href="' + Constant.PUBLIC_STAGGING_URL + 'consumer_account_activation/' + activation_code + '/' + maintenance_id + '" style="display:block;background:#2AA8D7; width:150px; line-height:28px; color:#fff; font-size:13px; border-radius:4px; text-decoration:none;text-align:center; margin-bottom:15px;">Activate My Account</a><br></td>' +
+//                                                 '</tr>' +
+//                                                 '<tr>' +
+//                                                 '<td>' +
+//                                                 '<p style="display:flex; padding-bottom:25px; margin:0;">' +
+//                                                 '<em style="color:#7C888D; font-size:15px; font-style:italic; line-height:normal; font-weight:300; margin-right:25px;">- Communicate with your trader</em>' +
+//                                                 '</p>' +
+//                                                 '<p style="display:flex; padding-bottom:25px; margin:0;">' +
+//                                                 '<em style="color:#7C888D; font-size:15px; font-style:italic; line-height:normal; font-weight:300; margin-right:25px;">- Add any new files</em>' +
+//                                                 '</p>' +
+//                                                 '<p style="display:flex; padding-bottom:25px; margin:0;">' +
+//                                                 '<em style="color:#7C888D; font-size:15px; font-style:italic; line-height:normal; font-weight:300; margin-right:25px;">- Cancel your request</em>' +
+//                                                 '</p>' +
+//                                                 '<p style="display:flex; padding-bottom:25px; margin:0;">' +
+//                                                 '<em style="color:#7C888D; font-size:15px; font-style:italic; line-height:normal; font-weight:300; margin-right:25px;">- Review your traders work</em>' +
+//                                                 '</p>' +
+//                                                 '</td>' +
+//                                                 '</tr>' +
+//                                                 '<tr>' +
+//                                                 '<td style="color:#7C888D; font-size:15px; line-height:normal; padding-bottom:40px;">If you are on mobile, <a href="' + Constant.APP_DOWNLOAD_URL + '"><b>click here</b></a> to download the PropertyCom app featuring the full TradeHub suite.</td>' +
+//                                                 '</tr>' +
+//                                                 '<tr>' +
+//                                                 '<td style="color:#7C888D; font-size:15px; line-height:normal;">Thanks and Welcome to Ownly Trade</td>' +
+//                                                 '</tr>' +
+//                                                 '</table>' +
+//                                                 '</td>' +
+//                                                 '</tr>' +
+//                                                 '</table>' +
+//                                                 '</td>' +
+//                                                 '</tr>' +
+//                                                 '</table>' +
+//                                                 '</body>' +
+//                                                 '</html>'// html body'
+//                                         }
+//                                         // console.log("mailOptions  1 ", mailOptions);
+//                                         let info = transporter.sendMail({
+//                                             from: mailOptions.from,
+//                                             to: mailOptions.to,
+//                                             subject: mailOptions.subject,
+//                                             text: mailOptions.subject,
+//                                             html: mailOptions.html
+//                                         }, function (error, response) {
+//                                             console.log("===============================");
+//                                             if (error) {
+//                                                 console.log("eeeeee", error);
+//                                             } else {
+//                                                 console.log("Message sent: Successfully  1 ==========> check here ", mailOptions.to);
+//                                             }
+//                                         });
+
+//                                         // sendmail({
+//                                         //     from: mailOptions.from,
+//                                         //     to: mailOptions.to,
+//                                         //     subject: mailOptions.subject,
+//                                         //     html: mailOptions.html,
+//                                         // }, function (err3, response) {
+//                                         //     if (err3) { } else {
+//                                         //     }
+//                                         // });
+//                                     } else {
+//                                         console.log('newuserId :: else => ');
+//                                     }
+
+//                                     var add_conditions = { maintenance: maintenance_id };
+//                                     await Address.findOne({ GNAFId: addData.GNAFId }, { GNAFId: 1, trader: 1 }, async function (err6, address_exist) {
+//                                         if (err6) {
+
+//                                         } else {
+//                                             if (address_exist) {
+//                                                 console.log('trader_id => ', trader_id);
+//                                                 // console.log('address_exist.trader => ', address_exist.trader);
+//                                                 // if (address_exist.trader && address_exist.trader != '' && trader_id && trader_id != '') {
+//                                                 if (trader_id && trader_id != '') {
+//                                                     console.log('existing trader => ');
+//                                                     var exist_trader = false;
+//                                                     address_exist.trader.map(function (trader) {
+//                                                         if (_.isEqual(trader, trader_id)) {
+//                                                             exist_trader = true;
+//                                                         }
+//                                                     });
+//                                                     if (!exist_trader) {
+//                                                         add_conditions.trader = mongoose.Types.ObjectId(trader_id);
+//                                                     }
+//                                                 }
+//                                                 // Push MR ID in Existing
+//                                                 await Address.update(
+//                                                     { GNAFId: addData.GNAFId },
+//                                                     { $push: add_conditions },
+//                                                     function (err, data) {
+
+//                                                     });
+//                                             } else {
+//                                                 if (trader_id && trader_id != '')
+//                                                     addData.trader = mongoose.Types.ObjectId(trader_id);
+
+//                                                 addData.maintenance = mongoose.Types.ObjectId(maintenance_id);
+//                                                 var addAddress = new Address(addData);
+//                                                 await addAddress.save(function (err7, addrData) {
+//                                                 });
+//                                             }
+//                                         }
+//                                     });
+
+//                                     if (trader_id && trader_id != '') {
+//                                         // Send Mail to specific Trader
+//                                         var quote_link = Constant.STAGGING_URL + '#!/maintance_detail/' + maintenance_id;
+//                                         if (category_id != '') {
+//                                             var conditions = { 'is_deleted': false, '_id': mongoose.Types.ObjectId(trader_id) };
+//                                             if (category_id != '') {
+//                                                 conditions.categories_id = mongoose.Types.ObjectId(category_id);
+//                                             }
+
+//                                             User.find(conditions)
+//                                                 // .select('_id, email, is_active')
+//                                                 .exec(async function (err, userTraderData) {
+
+//                                                     if (err) {
+
+//                                                     }
+//                                                     else {
+
+//                                                         var Traderdata_ = _.pluck(userTraderData, '_id');
+//                                                         var traderLog = { mail_send_trader_id: Traderdata_ };
+
+//                                                         maintentenance_traders_log.update(
+//                                                             { maintenance_id: mongoose.Types.ObjectId(maintenance_id) },
+//                                                             { $push: traderLog },
+//                                                             function (err__, log_data) {
+//                                                                 // console.log("err   ", err__)
+//                                                                 // console.log("update data   ", log_data);
+//                                                             });
+//                                                         console.log('createdByData ======1111111111111111111111111111=====> ', createdByData);
+//                                                         console.log('Traderdata_ :: Direct Request =========================> ', Traderdata_);
+//                                                         var to_users = [{
+//                                                             "users_id": mongoose.Types.ObjectId(Traderdata_[0])
+//                                                         }];
+//                                                         console.log('to_users => ', to_users);
+//                                                         // Add Notification For Direct MR
+//                                                         var notiObj = {};
+//                                                         notiObj.subject = req.body.request_overview + " - new maintenance request has been added by " + createdByData.firstname + " " + createdByData.lastname;
+//                                                         notiObj.message = maintenanaceData.address;
+//                                                         notiObj.from_user = mongoose.Types.ObjectId(createdByData._id);
+//                                                         notiObj.to_users = to_users;
+//                                                         notiObj.type = Constant.NOTIFICATION_TYPE_MAINTENENCE_REQ;
+//                                                         notiObj.maintenence_id = maintenanaceData._id;
+//                                                         notiObj.module = 2;
+//                                                         var notification = new NotificationInfo(notiObj);
+//                                                         notification.save(function (notErr, notData) {
+//                                                             if (notErr) {
+//                                                                 console.log('notErr :: Error occured while adding notification => ', notErr);
+//                                                                 // res.json({ code: Constant.ERROR_CODE, message: Constant.INTERNAL_ERROR });
+//                                                             } else {
+//                                                                 // res.json({ code: Constant.SUCCESS_CODE, data: data });
+//                                                                 console.log('successfully added notification => ', notData);
+//                                                             }
+//                                                         });
+//                                                         if (userTraderData) {
+//                                                             userTraderData.map(async function (value, key) {
+//                                                                 // console.log('value :: trader data=> ', value);
+
+//                                                                 var { business_name } = value;
+//                                                                 if (value.is_active == true) {
+//                                                                     // working code for email sending
+//                                                                     var mailOptions = {
+//                                                                         from: Config.EMAIL_FROM, // sender address
+//                                                                         to: value.email, // list of receivers
+//                                                                         // to: 'jerriranhard@yahoo.com', // list of receivers
+//                                                                         subject: mail_title, // Subject line
+//                                                                         text: mail_title, // plaintext body
+//                                                                         html: '<!doctype html>' +
+//                                                                             '<html lang="en">' +
+//                                                                             '<head>' +
+//                                                                             '<meta charset="utf-8">' +
+//                                                                             '<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">' +
+//                                                                             '<link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">' +
+//                                                                             '<title>Email </title>' +
+//                                                                             '</head>' +
+//                                                                             '<body>' +
+//                                                                             '<table style="font-family:Roboto;max-width:800px;width:100%;border-radius:4px;margin:0 auto;border-spacing:0;background: #3b4856;display: block;">' +
+//                                                                             '<tr>' +
+//                                                                             '<td style="border:0;padding: 130px 0 180px 0px;background:#3b4856;border-spacing:0;text-align:center;background: url(' + Constant.STAGGING_URL + 'assets/images/img-001.jpg) no-repeat center 0;background-size:contain">' +
+//                                                                             '<table style="width:90%;margin-left:auto;margin-right:auto;border-spacing:0;border-radius:4px;background:#fff;border-radius:10px;border-spacing:0">' +
+//                                                                             '<tr>' +
+//                                                                             '<td style="padding:20px; text-align:left;">' +
+//                                                                             '<table style="width:100%; margin:0; border-spacing:0; border-spacing: 0;">' +
+//                                                                             '<tr>' +
+//                                                                             '<td style="color:#7C888D; font-size:15px; line-height:normal; padding-bottom:20px;">Dear ' + changeCase.sentenceCase(business_name) + ',</td>' +
+//                                                                             '</tr>' +
+//                                                                             '<tr>' +
+//                                                                             '<td style="color:#7C888D; font-size:15px; line-height:normal; padding-bottom:40px;">One of our users on the Ownly Trade platform has viewed your profile and would like you to quote on a new job.</td>' +
+//                                                                             '</tr>' +
+//                                                                             '<tr>' +
+//                                                                             '<td style="color:#2E4255; font-size:18px; font-weight:700; line-height:normal; padding:0; margin:0;">Job details<br><br></td>' +
+//                                                                             '</tr>' +
+//                                                                             '<tr>' +
+//                                                                             '<td>' +
+//                                                                             '<p style="display:flex; padding-bottom:25px; margin:0;">' +
+//                                                                             '<em style="color:#7C888D; font-size:15px; font-style:italic; line-height:normal; font-weight:300; margin-right:25px;">Title: ' + '<strong>' + request_overview + '</strong>' + '</em>' +
+//                                                                             '</p>' +
+//                                                                             '<p style="display:flex; padding-bottom:25px; margin:0;">' +
+//                                                                             '<em style="color:#7C888D; font-size:15px; font-style:italic; line-height:normal; font-weight:300; margin-right:25px;">Description: ' + '<strong>' + request_detail + '</strong>' + '</em>' +
+//                                                                             '</p>' +
+//                                                                             '<p style="display:flex; padding-bottom:25px; margin:0;">' +
+//                                                                             '<em style="color:#7C888D; font-size:15px; font-style:italic; line-height:normal; font-weight:300; margin-right:25px;">Budget: ' + '<strong>' + budget + '</strong>' + '</em>' +
+//                                                                             '</p>' +
+//                                                                             '<p style="display:flex; padding-bottom:25px; margin:0;">' +
+//                                                                             '<em style="color:#7C888D; font-size:15px; font-style:italic; line-height:normal; font-weight:300; margin-right:25px;">Due Date: ' + '<strong>' + due_date + '</strong>' + '</em>' +
+//                                                                             '</p>' +
+//                                                                             '</td>' +
+//                                                                             '</tr>' +
+//                                                                             '<tr>' +
+//                                                                             '<td style="color:#2E4255; font-size:18px; font-weight:500; line-height:normal; padding:0; margin:0;">If you would like to quote on this job please <a target="_blank" href="' + quote_link + '">click here</a> to communicate with the customer and submit your quote!<br><br></td>' +
+//                                                                             '</tr>' +
+//                                                                             '<tr>' +
+//                                                                             '<td style="color:#2E4255; font-size:18px; font-weight:700; line-height:normal; padding:0; margin:0;"><a target="_blank" href="' + quote_link + '" style="display:block;background:#2AA8D7; width:100px; line-height:28px; color:#fff; font-size:13px; border-radius:4px; text-decoration:none;text-align:center; margin-bottom:15px;">Quote Now</a><br /><br /><br /></td>' +
+//                                                                             '</tr>' +
+//                                                                             '<tr>' +
+//                                                                             '<td style="color:#7C888D; font-size:15px; line-height:normal;">Thank you,</td>' +
+//                                                                             '</tr>' +
+//                                                                             '<tr>' +
+//                                                                             '<td style="color:#7C888D; font-size:15px; line-height:normal;">The Ownly Trade team!</td>' +
+//                                                                             '</tr>' +
+//                                                                             '</table>' +
+//                                                                             '</td>' +
+//                                                                             '</tr>' +
+//                                                                             '</table>' +
+//                                                                             '</td>' +
+//                                                                             '</tr>' +
+//                                                                             '</table>' +
+//                                                                             '</body>' +
+//                                                                             '</html>'
+//                                                                     };
+//                                                                     let info = transporter.sendMail({
+//                                                                         from: mailOptions.from,
+//                                                                         to: mailOptions.to,
+//                                                                         subject: mailOptions.subject,
+//                                                                         text: mailOptions.subject,
+//                                                                         html: mailOptions.html
+//                                                                     }, function (error, response) {
+//                                                                         if (error) {
+//                                                                             console.log("eeeeee", error);
+//                                                                         } else {
+//                                                                             let msgOptions = {
+//                                                                                 mobile_no: value.mobile_no,
+//                                                                                 business_name: value.business_name,
+//                                                                                 title: maintenanaceData.request_overview,
+//                                                                                 budget: maintenanaceData.budget,
+//                                                                                 quote_link: quote_link
+//                                                                             }
+//                                                                             console.log('maintenanaceData :: addMR=> ', maintenanaceData);
+
+//                                                                             console.log("Message sent: Successfully  2 ", mailOptions.to);
+//                                                                             console.log('Options for Text message=> ', msgOptions);
+//                                                                             sms.JobRequestMsg(msgOptions);
+//                                                                         }
+//                                                                     });
+//                                                                     // working code for email sending
+
+
+
+//                                                                 } else {
+//                                                                     // var activation_code = Math.random().toString(36).substring(2, 10) + Math.random().toString(36).substring(2, 10);
+//                                                                     var activation_code = value.activation_code;
+//                                                                     var click_here = Constant.PUBLIC_STAGGING_URL + 'trader_account_activation/' + activation_code + '/' + maintenance_id;
+//                                                                     // var updateUserRecord = {
+//                                                                     //     activation_code: activation_code
+//                                                                     // }
+//                                                                     // User.update({ _id: userTraderData._id }, { $set: updateUserRecord }, function (err) {
+//                                                                     // });
+
+//                                                                     var mailOptions = {
+//                                                                         from: Config.EMAIL_FROM, // sender address
+//                                                                         to: value.email, // list of receivers
+//                                                                         // to: 'jerriranhard@yahoo.com',
+//                                                                         subject: value.firstname + ' ' + value.lastname + '- NEW QUOTE REQUEST', // Subject line
+//                                                                         text: value.firstname + ' ' + value.lastname + '- NEW QUOTE REQUEST', // plaintext body
+//                                                                         html: '<!doctype html>' +
+//                                                                             '<html lang="en">' +
+//                                                                             '<head>' +
+//                                                                             '<meta charset="utf-8">' +
+//                                                                             '<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">' +
+//                                                                             '<link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">' +
+//                                                                             '<title>Email </title>' +
+//                                                                             '</head>' +
+//                                                                             '<body>' +
+//                                                                             '<table style="font-family:Roboto;max-width:800px;width:100%;border-radius:4px;margin:0 auto;border-spacing:0;background: #3b4856;display: block;">' +
+//                                                                             '<tr>' +
+//                                                                             '<td style="border:0;padding: 130px 0 180px 0px;background:#3b4856;border-spacing:0;text-align:center;background: url(' + Constant.STAGGING_URL + 'assets/images/img-001.jpg) no-repeat center 0;background-size:contain">' +
+//                                                                             '<table style="width:90%;margin-left:auto;margin-right:auto;border-spacing:0;border-radius:4px;background:#fff;border-radius:10px;border-spacing:0">' +
+//                                                                             '<tr>' +
+//                                                                             '<td style="padding:20px; text-align:left;">' +
+//                                                                             '<table style="width:100%; margin:0; border-spacing:0; border-spacing: 0;">' +
+//                                                                             '<tr>' +
+//                                                                             '<td style="color:#7C888D; font-size:15px; line-height:normal; padding-bottom:20px;">Good news travels fast! Ownly wants to connect as someone is interested in using your services.</td>' +
+//                                                                             '</tr>' +
+//                                                                             '<tr>' +
+//                                                                             '<td style="color:#7C888D; font-size:15px; line-height:normal; padding-bottom:40px;">As you know, unlike other search platforms, we give all <b>TRADES A FAIR GO.</b> We help you <b>PROMOTE, SECURE</b> AND <b>GROW</b> YOUR BUSINESS.</td>' +
+//                                                                             '</tr>' +
+//                                                                             '<tr>' +
+//                                                                             '<td style="padding:25px;" >' +
+//                                                                             ' <table style="width:100%; margin:0 auto; border:0; border-spacing:0; text-align:left;">' +
+//                                                                             ' <tr><td style="padding:0 0 30px;font-size:16px; color:#606382; font-weight:normal;"><strong>What’s even better?</strong></td></tr>' +
+//                                                                             ' <tr><td style="font-size:16px; color:#606382; font-weight:normal; padding:0 0 20px 40px;"><div style="width:8px; height:8px; background:#606382; display:inline-block; border-radius:100px; margin:0 10px 0 0;"></div>Our trade innovation platform is completely free to use! </td></tr>' +
+//                                                                             ' <tr><td style="font-size:16px; color:#606382; font-weight:normal; padding:0 0 20px 40px;"><div style="width:8px; height:8px; background:#606382; display:inline-block; border-radius:100px; margin:0 10px 0 0;"></div>Connecting you to thousands of new business opportunities</td></tr>' +
+//                                                                             ' <tr><td style="font-size:16px; color:#606382; font-weight:normal; padding:0 0 20px 40px;"><div style="width:8px; height:8px; background:#606382; display:inline-block; border-radius:100px; margin:0 10px 0 0;"></div>UNLIMITED quotes</td></tr>' +
+//                                                                             ' <tr><td style="font-size:16px; color:#606382; font-weight:normal; padding:0 0 20px 40px;"><div style="width:8px; height:8px; background:#606382; display:inline-block; border-radius:100px; margin:0 10px 0 0;"></div>No booking fees or taking a share of your hard-earned revenue</td></tr>' +
+//                                                                             ' <tr><td style="font-size:16px; color:#606382; font-weight:normal; padding:0 0 20px 40px;"><div style="width:8px; height:8px; background:#606382; display:inline-block; border-radius:100px; margin:0 10px 0 0;"></div>Giving your business exposure by saving your work to a property file so the next owner/tenant/property manager can recall you with a click of a button</td></tr>' +
+//                                                                             ' <tr><td style="font-size:16px; color:#606382; font-weight:normal; padding:0 0 20px 40px;"><div style="width:8px; height:8px; background:#606382; display:inline-block; border-radius:100px; margin:0 10px 0 0;"></div>Connecting you to new markets–strata managers, property managers which no other trade platform has done before!</td></tr>' +
+//                                                                             '</table >' +
+//                                                                             '</td>' +
+//                                                                             '</tr>' +
+//                                                                             '<tr>' +
+//                                                                             '<td style="color:#2E4255; font-size:15px; font-weight:500; line-height:normal; padding:0 0 20px; margin:0;">You are one step away from responding to your quote request and securing your next potential job:<br></td>' +
+//                                                                             '</tr>' +
+//                                                                             '<tr>' +
+//                                                                             '<td style="color:#2E4255; font-size:15px; font-weight:700; line-height:normal; padding:0 0 20px; margin:0;"><a target="_blank" href="' + click_here + '" style="display:block;background:#2AA8D7; width:100px; line-height:28px; color:#fff; font-size:13px; border-radius:4px; text-decoration:none;text-align:center; margin-bottom:15px;">Quote Now</a><br /><br /><br /></td>' +
+//                                                                             '</tr>' +
+//                                                                             '<tr>' +
+//                                                                             '<td style="color:#7C888D; font-size:15px; line-height:normal;">Thank you,</td>' +
+//                                                                             '</tr>' +
+//                                                                             '<tr>' +
+//                                                                             '<td style="color:#7C888D; font-size:15px; line-height:normal;">The Ownly Trade team!</td>' +
+//                                                                             '</tr>' +
+//                                                                             '</table>' +
+//                                                                             '</td>' +
+//                                                                             '</tr>' +
+//                                                                             '</table>' +
+//                                                                             '</td>' +
+//                                                                             '</tr>' +
+//                                                                             '</table>' +
+//                                                                             '</body>' +
+//                                                                             '</html>'
+//                                                                     };
+//                                                                     let info = transporter.sendMail({
+//                                                                         from: mailOptions.from,
+//                                                                         to: mailOptions.to,
+//                                                                         subject: mailOptions.subject,
+//                                                                         text: mailOptions.subject,
+//                                                                         html: mailOptions.html
+//                                                                     }, function (error, response) {
+//                                                                         console.log("===============================");
+//                                                                         if (error) {
+//                                                                             console.log("eeeeee", error);
+//                                                                         } else {
+//                                                                             let msgOptions = {
+//                                                                                 mobile_no: value.mobile_no,
+//                                                                                 business_name: value.business_name,
+//                                                                                 title: maintenanaceData.request_overview,
+//                                                                                 budget: maintenanaceData.budget,
+//                                                                                 quote_link: click_here
+//                                                                             }
+//                                                                             console.log("Message sent: Successfully  3 ", mailOptions.to);
+//                                                                             sms.JobRequestMsg(msgOptions);
+//                                                                         }
+//                                                                     });
+
+//                                                                 }
+//                                                             });
+//                                                         }
+//                                                     }
+//                                                 });
+//                                         }
+
+//                                     } else {
+//                                         console.log('no trade id => ');
+//                                         var quote_link = Constant.STAGGING_URL + '#!/maintance_detail/' + maintenance_id;
+//                                         // Send Mail to within specified km Traders
+
+//                                         conditions = { 'is_deleted': false };
+//                                         console.log('latitude :: Check Here => ', latitude);
+//                                         console.log('longitude :: Check Here => ', longitude);
+//                                         if (longitude && longitude != '' && latitude && latitude != '') {
+
+//                                             conditions.location = {
+//                                                 $geoWithin: {
+//                                                     $centerSphere: [
+//                                                         [longitude, latitude], Constant.FIFTY_KM_INTO_MILE / Constant.RADIUS
+//                                                     ]
+//                                                 }
+//                                             };
+//                                         }
+
+//                                         if (category_id != '') {
+//                                             //console.log("category_id   ", category_id);
+//                                             conditions.categories_id = mongoose.Types.ObjectId(category_id);
+//                                         }
+//                                         //console.log("Data      ", JSON.stringify(conditions));
+//                                         var parser = User.find(conditions)
+//                                             .exec(async function (err, userData) {
+//                                                 // console.log("Here to call", userData);
+//                                                 // console.log("Here to call err ", err);
+
+//                                                 if (!err) {
+
+//                                                     var Traderdata_ = _.pluck(userData, '_id');
+//                                                     console.log('Traderdata_ ===================> ', Traderdata_);
+//                                                     var traderLog = { mail_send_trader_id: Traderdata_ };
+
+//                                                     maintentenance_traders_log.update(
+//                                                         { maintenance_id: mongoose.Types.ObjectId(maintenance_id) },
+//                                                         { $push: traderLog },
+//                                                         function (err__, log_data) {
+//                                                             // console.log("err   ", err__)
+//                                                             // console.log("update data   ", log_data);
+//                                                         });
+//                                                     console.log("userData.length ==>", userData.length);
+
+//                                                     let traders_arr = [];
+//                                                     Traderdata_.map(ele => {
+//                                                         traders_arr.push({ "users_id": mongoose.Types.ObjectId(ele) })
+//                                                     })
+//                                                     console.log('traders_arr =========================> ', traders_arr);
+
+//                                                     console.log('createdByData ======2222222222222222222222222====> ', createdByData);
+
+//                                                     // Add Notification For Direct MR
+//                                                     var notiObj = {};
+//                                                     notiObj.subject = req.body.request_overview + " - new maintenance request has been added by " + createdByData.firstname + " " + createdByData.lastname;
+//                                                     notiObj.message = maintenanaceData.address;
+//                                                     notiObj.from_user = mongoose.Types.ObjectId(createdByData._id);
+//                                                     notiObj.to_users = traders_arr;
+//                                                     notiObj.type = Constant.NOTIFICATION_TYPE_MAINTENENCE_REQ;
+//                                                     notiObj.maintenence_id = maintenanaceData._id;
+//                                                     notiObj.module = 2;
+//                                                     var notification = new NotificationInfo(notiObj);
+//                                                     notification.save(function (notErr, notData) {
+//                                                         if (notErr) {
+//                                                             console.log('notErr :: Error occured while adding notification => ', notErr);
+//                                                             // res.json({ code: Constant.ERROR_CODE, message: Constant.INTERNAL_ERROR });
+//                                                         } else {
+//                                                             // res.json({ code: Constant.SUCCESS_CODE, data: data });
+//                                                             console.log('successfully added notification => ', notData);
+//                                                         }
+//                                                     });
+//                                                     var key = 1;
+//                                                     for (const value of userData) {
+
+//                                                         let msgOptions = {
+//                                                             mobile_no: value.mobile_no,
+//                                                             business_name: value.business_name,
+//                                                             title: maintenanaceData.request_overview,
+//                                                             budget: maintenanaceData.budget,
+//                                                             quote_link: quote_link
+//                                                         }
+
+//                                                         // console.log("single user Value", value);
+//                                                         console.log("USER :: Public Request ==>");
+
+//                                                         // parser.pause();
+//                                                         // var i = 0;
+//                                                         // setTimeout(function () {
+//                                                         setTimeout(async function timer() {
+//                                                             var business_name = value.business_name;
+//                                                             if (value.is_active == true) {
+//                                                                 console.log("IF");
+//                                                                 //console.log("Active USer   ", value._id);
+//                                                                 var click_here = Constant.STAGGING_URL;
+//                                                                 var mailOptions = {
+//                                                                     from: Config.EMAIL_FROM, // sender address
+//                                                                     to: value.email, // list of receivers
+//                                                                     // to: 'jerriranhard@yahoo.com',
+//                                                                     subject: mail_title, // Subject line
+//                                                                     text: mail_title, // plaintext body
+//                                                                     html: '<!doctype html>' +
+//                                                                         '<html lang="en">' +
+//                                                                         '<head>' +
+//                                                                         '<meta charset="utf-8">' +
+//                                                                         '<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">' +
+//                                                                         '<link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">' +
+//                                                                         '<title>Email </title>' +
+//                                                                         '</head>' +
+//                                                                         '<body>' +
+//                                                                         '<table style="font-family:Roboto;max-width:800px;width:100%;border-radius:4px;margin:0 auto;border-spacing:0;background: #3b4856;display: block;">' +
+//                                                                         '<tr>' +
+//                                                                         '<td style="border:0;padding: 130px 0 180px 0px;background:#3b4856;border-spacing:0;text-align:center;background: url(' + Constant.STAGGING_URL + 'assets/images/img-001.jpg)no-repeat center 0;background-size:contain">' +
+//                                                                         '<table style="width:90%;margin-left:auto;margin-right:auto;border-spacing:0;border-radius:4px;background:#fff;border-radius:10px;border-spacing:0">' +
+//                                                                         '<tr>' +
+//                                                                         '<td style="padding:20px; text-align:left;">' +
+//                                                                         '<table style="width:100%; margin:0; border-spacing:0; border-spacing: 0;">' +
+//                                                                         '<tr>' +
+//                                                                         '<td style="color:#7C888D; font-size:15px; line-height:normal; padding-bottom:20px;">Dear ' + changeCase.sentenceCase(business_name) + ',</td>' +
+//                                                                         '</tr>' +
+//                                                                         '<tr>' +
+//                                                                         '<td style="color:#7C888D; font-size:15px; line-height:normal; padding-bottom:40px;">One of our users on the Ownly Trade platform has posted a job in your area. </td>' +
+//                                                                         '</tr>' +
+//                                                                         '<tr>' +
+//                                                                         '<td style="color:#2E4255; font-size:18px; font-weight:700; line-height:normal; padding:0; margin:0;">Job details<br><br></td>' +
+//                                                                         '</tr>' +
+//                                                                         '<tr>' +
+//                                                                         '<td>' +
+//                                                                         '<p style="display:flex; padding-bottom:25px; margin:0;">' +
+//                                                                         '<em style="color:#7C888D; font-size:15px; font-style:italic; line-height:normal; font-weight:300; margin-right:25px;">Title: ' + '<strong>' + request_overview + '</strong>' + '</em>' +
+//                                                                         '</p>' +
+//                                                                         '<p style="display:flex; padding-bottom:25px; margin:0;">' +
+//                                                                         '<em style="color:#7C888D; font-size:15px; font-style:italic; line-height:normal; font-weight:300; margin-right:25px;">Description: ' + '<strong>' + request_detail + '</strong>' + '</em>' +
+//                                                                         '</p>' +
+//                                                                         '<p style="display:flex; padding-bottom:25px; margin:0;">' +
+//                                                                         '<em style="color:#7C888D; font-size:15px; font-style:italic; line-height:normal; font-weight:300; margin-right:25px;">Budget: ' + '<strong>' + budget + '</strong>' + '</em>' +
+//                                                                         '</p>' +
+//                                                                         '<p style="display:flex; padding-bottom:25px; margin:0;">' +
+//                                                                         '<em style="color:#7C888D; font-size:15px; font-style:italic; line-height:normal; font-weight:300; margin-right:25px;">Due Date: ' + '<strong>' + due_date + '</strong>' + '</em>' +
+//                                                                         '</p>' +
+//                                                                         '</td>' +
+//                                                                         '</tr>' +
+//                                                                         '<tr>' +
+//                                                                         '<td style="color:#2E4255; font-size:18px; font-weight:500; line-height:normal; padding:0; margin:0;">If you would like to quote on this job please <a target="_blank" href="' + quote_link + '">click here</a> to view the job details and submit a quote! </td>' +
+//                                                                         '</tr>' +
+//                                                                         '<tr>' +
+//                                                                         '<td style="color:#2E4255; font-size:18px; font-weight:700; line-height:normal; padding:0; margin:0;"><br><a target="_blank" href="' + quote_link + '" style="display:block;background:#2AA8D7; width:100px; line-height:28px; color:#fff; font-size:13px; border-radius:4px; text-decoration:none; text-align:center; margin-bottom:15px;">Quote Now</a><br /><br /><br /></td>' +
+//                                                                         '</tr>' +
+//                                                                         '<tr>' +
+//                                                                         '<td style="color:#7C888D; font-size:15px; line-height:normal;"><br>Thank you,</td>' +
+//                                                                         '</tr>' +
+//                                                                         '<tr>' +
+//                                                                         '<td style="color:#7C888D; font-size:15px; line-height:normal;">The Ownly Trade team!</td>' +
+//                                                                         '</tr>' +
+//                                                                         '</table>' +
+//                                                                         '</td>' +
+//                                                                         '</tr>' +
+//                                                                         '</table>' +
+//                                                                         '</td>' +
+//                                                                         '</tr>' +
+//                                                                         '</table>' +
+//                                                                         '</body>' +
+//                                                                         '</html>'
+//                                                                 };
+//                                                                 console.log("before send mail If condition");
+
+
+//                                                                 let info = transporter.sendMail({
+//                                                                     from: mailOptions.from,
+//                                                                     to: mailOptions.to,
+//                                                                     subject: mailOptions.subject,
+//                                                                     text: mailOptions.subject,
+//                                                                     html: mailOptions.html
+//                                                                 }, function (error, response) {
+//                                                                     console.log("===============================");
+//                                                                     if (error) {
+//                                                                         console.log("eeeeee", error);
+//                                                                     } else {
+
+//                                                                         console.log("Message sent: Successfully  4 ", mailOptions.to);
+//                                                                         sms.JobRequestMsg(msgOptions);
+//                                                                     }
+//                                                                 });
+
+//                                                                 console.log("after send mail If condition");
+
+//                                                                 // parser.resume();
+//                                                                 // console.log("mail section 1", mailOptions);
+//                                                             } else {
+//                                                                 console.log("Else :: !isActive ==>");
+
+//                                                                 //console.log("InActive USer   ", value._id);
+//                                                                 var activation_code = Math.random().toString(36).substring(2, 10) + Math.random().toString(36).substring(2, 10);
+//                                                                 var click_here = Constant.PUBLIC_STAGGING_URL + 'trader_account_activation/' + activation_code + "/" + maintenance_id;
+//                                                                 var updateUserRecord = {
+//                                                                     activation_code: activation_code
+//                                                                 }
+//                                                                 User.update({ _id: value._id }, { $set: updateUserRecord }, function (err) {
+//                                                                 });
+
+//                                                                 var mailOptions = {
+//                                                                     from: Config.EMAIL_FROM, // sender address
+//                                                                     to: value.email, // list of receivers
+//                                                                     // to: 'jerriranhard@yahoo.com',
+//                                                                     subject: value.firstname + ' ' + value.lastname + '- NEW QUOTE REQUEST', // Subject line
+//                                                                     text: value.firstname + ' ' + value.lastname + '- NEW QUOTE REQUEST', // plaintext body
+//                                                                     html: '<!doctype html>' +
+//                                                                         '<html lang="en">' +
+//                                                                         '<head>' +
+//                                                                         '<meta charset="utf-8">' +
+//                                                                         '<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">' +
+//                                                                         '<link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">' +
+//                                                                         '<title>Email </title>' +
+//                                                                         '</head>' +
+//                                                                         '<body>' +
+//                                                                         '<table style="font-family:Roboto;max-width:800px;width:100%;border-radius:4px;margin:0 auto;border-spacing:0;background: #3b4856;display: block;">' +
+//                                                                         '<tr>' +
+//                                                                         '<td style="border:0;padding: 130px 0 180px 0px;background:#3b4856;border-spacing:0;text-align:center;background: url(' + Constant.STAGGING_URL + 'assets/images/img-001.jpg) no-repeat center 0;background-size:contain">' +
+//                                                                         '<table style="width:90%;margin-left:auto;margin-right:auto;border-spacing:0;border-radius:4px;background:#fff;border-radius:10px;border-spacing:0">' +
+//                                                                         '<tr>' +
+//                                                                         '<td style="padding:20px; text-align:left;">' +
+//                                                                         '<table style="width:100%; margin:0; border-spacing:0; border-spacing: 0;">' +
+//                                                                         '<tr>' +
+//                                                                         '<td style="color:#7C888D; font-size:15px; line-height:normal; padding-bottom:20px;">Good news travels fast! Ownly wants to connect as someone is interested in using your services.</td>' +
+//                                                                         '</tr>' +
+//                                                                         '<tr>' +
+//                                                                         '<td style="color:#7C888D; font-size:15px; line-height:normal; padding-bottom:40px;">As you know, unlike other search platforms, we give all <b>TRADES A FAIR GO.</b> We help you <b>PROMOTE, SECURE</b> AND <b>GROW</b> YOUR BUSINESS.</td>' +
+//                                                                         '</tr>' +
+//                                                                         '<tr>' +
+//                                                                         '<td style="padding:25px;" >' +
+//                                                                         ' <table style="width:100%; margin:0 auto; border:0; border-spacing:0; text-align:left;">' +
+//                                                                         ' <tr><td style="padding:0 0 30px;font-size:16px; color:#606382; font-weight:normal;"><strong>What’s even better?</strong></td></tr>' +
+//                                                                         ' <tr><td style="font-size:16px; color:#606382; font-weight:normal; padding:0 0 20px 40px;"><div style="width:8px; height:8px; background:#606382; display:inline-block; border-radius:100px; margin:0 10px 0 0;"></div>Our trade innovation platform is completely free to use! </td></tr>' +
+//                                                                         ' <tr><td style="font-size:16px; color:#606382; font-weight:normal; padding:0 0 20px 40px;"><div style="width:8px; height:8px; background:#606382; display:inline-block; border-radius:100px; margin:0 10px 0 0;"></div>Connecting you to thousands of new business opportunities</td></tr>' +
+//                                                                         ' <tr><td style="font-size:16px; color:#606382; font-weight:normal; padding:0 0 20px 40px;"><div style="width:8px; height:8px; background:#606382; display:inline-block; border-radius:100px; margin:0 10px 0 0;"></div>UNLIMITED quotes</td></tr>' +
+//                                                                         ' <tr><td style="font-size:16px; color:#606382; font-weight:normal; padding:0 0 20px 40px;"><div style="width:8px; height:8px; background:#606382; display:inline-block; border-radius:100px; margin:0 10px 0 0;"></div>No booking fees or taking a share of your hard-earned revenue</td></tr>' +
+//                                                                         ' <tr><td style="font-size:16px; color:#606382; font-weight:normal; padding:0 0 20px 40px;"><div style="width:8px; height:8px; background:#606382; display:inline-block; border-radius:100px; margin:0 10px 0 0;"></div>Giving your business exposure by saving your work to a property file so the next owner/tenant/property manager can recall you with a click of a button</td></tr>' +
+//                                                                         ' <tr><td style="font-size:16px; color:#606382; font-weight:normal; padding:0 0 20px 40px;"><div style="width:8px; height:8px; background:#606382; display:inline-block; border-radius:100px; margin:0 10px 0 0;"></div>Connecting you to new markets–strata managers, property managers which no other trade platform has done before!</td></tr>' +
+//                                                                         '</table >' +
+//                                                                         '</td>' +
+//                                                                         '</tr>' +
+//                                                                         '<tr>' +
+//                                                                         '<td style="color:#2E4255; font-size:15px; font-weight:500; line-height:normal; padding:0 0 20px; margin:0;">You are one step away from responding to your quote request and securing your next potential job:<br></td>' +
+//                                                                         '</tr>' +
+//                                                                         '<tr>' +
+//                                                                         '<td style="color:#2E4255; font-size:15px; font-weight:700; line-height:normal; padding:0 0 20px; margin:0;"><a target="_blank" href="' + click_here + '" style="display:block;background:#2AA8D7; width:100px; line-height:28px; color:#fff; font-size:13px; border-radius:4px; text-decoration:none;text-align:center; margin-bottom:15px;">Quote Now</a><br /><br /><br /></td>' +
+//                                                                         '</tr>' +
+//                                                                         '<tr>' +
+//                                                                         '<td style="color:#7C888D; font-size:15px; line-height:normal;">Thank you,</td>' +
+//                                                                         '</tr>' +
+//                                                                         '<tr>' +
+//                                                                         '<td style="color:#7C888D; font-size:15px; line-height:normal;">The Ownly Trade team!</td>' +
+//                                                                         '</tr>' +
+//                                                                         '</table>' +
+//                                                                         '</td>' +
+//                                                                         '</tr>' +
+//                                                                         '</table>' +
+//                                                                         '</td>' +
+//                                                                         '</tr>' +
+//                                                                         '</table>' +
+//                                                                         '</body>' +
+//                                                                         '</html>'
+//                                                                 };
+//                                                                 console.log("before send mail else condition");
+
+//                                                                 let info = transporter.sendMail({
+//                                                                     from: mailOptions.from,
+//                                                                     to: mailOptions.to,
+//                                                                     subject: mailOptions.subject,
+//                                                                     text: mailOptions.subject,
+//                                                                     html: mailOptions.html
+//                                                                 }, function (error, response) {
+//                                                                     console.log("===============================");
+//                                                                     if (error) {
+//                                                                         console.log("eeeeee", error);
+//                                                                     } else {
+//                                                                         console.log("Message sent: Successfully 5  ", mailOptions.to);
+//                                                                         sms.JobRequestMsg(msgOptions);
+//                                                                     }
+//                                                                 });
+
+//                                                                 // sendmail({
+//                                                                 //     from: mailOptions.from,
+//                                                                 //     to: mailOptions.to,
+//                                                                 //     subject: mailOptions.subject,
+//                                                                 //     html: mailOptions.html,
+//                                                                 // }, function (error, response) {
+//                                                                 //     if (error) {
+//                                                                 //         console.log(error);
+//                                                                 //         console.log("Message failed => ", mailOptions.to);
+//                                                                 //     } else {
+//                                                                 //         console.log("Message sent: Successfully ", mailOptions.to);
+//                                                                 //     }
+//                                                                 // });
+//                                                                 console.log("after send mail Else condition");
+
+//                                                                 // console.log("mail section 2", mailOptions);
+//                                                                 // parser.resume();
+//                                                             }
+//                                                             key++;
+//                                                         }, key * 2000);
+//                                                     }
+//                                                     console.log("end here-------------------------------------------------------------------------");
+//                                                 }
+//                                             });
+//                                     }
+//                                     res.json({ code: Constant.SUCCESS_CODE, data: maintenanaceData });
+//                                 }
+//                             });
+//                         });
+//                     });
+//                     req1.end();
+//                 });
+//             } else {
+//                 res.json({ code: Constant.ERROR_CODE, message: Constant.INTERNAL_ERROR });
+//             }
+
+//         } else {
+//             res.json({ code: Constant.ERROR_CODE, message: Constant.REQ_DATA_MISSING });
+//         }
+//     })();
+// }
+
 function addMR(req, res) {
     console.log('req.body :: addMR => ', req.body);
     console.log('req.body.latitude :: addMR => ', req.body.latitude);
@@ -3312,18 +4226,12 @@ function addMR(req, res) {
     var newuserId = [];
     var user_id = '';
     (async () => {
-        // console.log("step1");
         if (email && category_id && email != '' && category_id != '') {
-            // console.log("step2");
             let userRecord = await User.findOne({ email: email }, { email: 1, _id: 1 });
-            //console.log("userRecord", userRecord);
             if (userRecord) {
                 user_id = userRecord._id
             } else {
                 console.log("New User");
-                //Add User, Send Mail to Consumer for Account Activation and Mail to Traders for new Job
-
-                // Add User Start
                 var userData = {
                     firstname: firstname,
                     email: email,
@@ -3334,16 +4242,11 @@ function addMR(req, res) {
                     referedBy: trader_id
                 };
                 var UsersRecord = new User(userData);
-
-                // call the built-in save method to save to the database
                 newuserId = await UsersRecord.save();
-                //console.log("new added user is ", newuserId);
                 user_id = newuserId._id;
             }
-            //console.log("user_id =>", user_id);
             if (user_id && user_id != '') {
                 console.log("calling;;;");
-                //Add MR and Send Mail to Traders for new Job
                 var mrData = {};
                 var addData = {};
 
@@ -3390,7 +4293,6 @@ function addMR(req, res) {
                     mrData.created_by = created_by;
                 if (created_by_role && validator.isValidObject(created_by_role))
                     mrData.created_by_role = created_by_role;
-                //console.log("step6    ", mrData);
 
                 var options = {
                     method: 'GET',
@@ -3415,7 +4317,6 @@ function addMR(req, res) {
                         "port": null,
                         "path": "/maps/api/geocode/json?address=" + address1 + "&key=AIzaSyCGWZqTcVNj2IeuAud3EsdL3ewktb0yCFo"
                     };
-                    // console.log('options for google map API : addMR => ', options);
                     var req1 = await http.request(options, async function (res1) {
                         var chunks = [];
                         await res1.on("data", function (chunk) {
@@ -3426,11 +4327,8 @@ function addMR(req, res) {
                             var body = Buffer.concat(chunks);
                             var address2 = body.toString();
                             var result = JSON.parse(address2).results;
-                            // console.log('result :: data of google map api => ', result);
-                            //console.log("result   ", JSON.stringify(JSON.parse(address2)));
                             if (result && result.length > 0) {
                                 const locData = result[0];
-                                // console.log("===========>   " ,  locData.address_components);
                                 if (locData.address_components && locData.address_components.length > 0) {
                                     locData.address_components.map(function (location_part) {
                                         if (location_part.types && location_part.types[0] && location_part.types[0] == 'administrative_area_level_1')
@@ -3442,8 +4340,6 @@ function addMR(req, res) {
                                 if (locData.geometry && locData.geometry.location && locData.geometry.location.lat && locData.geometry.location.lng) {
                                     mrData.latitude = await locData.geometry.location.lat;
                                     mrData.longitude = await locData.geometry.location.lng;
-                                    // console.log("======================= ", mrData.latitude + "    " + mrData.longitude);
-
                                     mrData.location = await {
                                         coordinates: [locData.geometry.location.lng, locData.geometry.location.lat],
                                         type: 'Point'
@@ -3453,100 +4349,252 @@ function addMR(req, res) {
 
                             var maintenance_id = '';
                             var maintenance = new maintenances(mrData);
-                            //console.log("mr data    ", mrData);
                             await maintenance.save(async function (err5, maintenanaceData) {
                                 if (err5) {
-                                    // console.log("err5     ", err5);
+                                    console.log("err5     ", err5);
                                 } else {
                                     maintenance_id = await maintenanaceData._id;
                                     let createdByData;
                                     await User.findById(maintenanaceData.created_by, async function (createdByErr, createdByInfo) {
                                         console.log('createdByInfo => ', await createdByInfo);
                                         if (createdByErr) {
-                                            console.log('createdByErr :: Error occured while retrieving data from users table => ', createdByErr);
+                                            console.log('createdByErr :: Error occurred while retrieving data from users table => ', createdByErr);
                                         } else {
-                                            createdByData = await createdByInfo
+                                            createdByData = await createdByInfo;
                                         }
-                                    })
+                                    });
+
                                     var traderLog = {
+
+
                                         maintenance_id: mongoose.Types.ObjectId(maintenance_id)
                                     };
                                     var addTraderLog = new maintentenance_traders_log(traderLog);
-                                    await addTraderLog.save(function (err_, traderLogs) {
+                                    await addTraderLog.save(function (err_, traderLogs) {});
 
-                                    });
+                                    // New email notification for maintenance request creation - Trader
+                                    if (trader_id && trader_id != '') {
+                                        let traderData = await User.findById(trader_id, 'firstname lastname email');
+                                        if (traderData) {
+                                            let mailOptions = {
+                                                from: Config.EMAIL_FROM,
+                                                to: traderData.email,
+                                                subject: 'New Maintenance Request Assigned',
+                                                text: 'New Maintenance Request Assigned',
+                                                html: `<!doctype html>
+                                                    <html lang="en">
+                                                    <head>
+                                                        <meta charset="utf-8">
+                                                        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+                                                        <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+                                                        <title>Email</title>
+                                                    </head>
+                                                    <body>
+                                                        <table style="font-family:Roboto;max-width:800px;width:100%;border-radius:4px;margin:0 auto;border-spacing:0;background:#3b4856;">
+                                                            <tr>
+                                                                <td style="border:0;padding:130px 0 180px 0px;background:#3b4856;border-spacing:0;text-align:center;background:url(${Constant.STAGGING_URL}assets/images/img-001.jpg) no-repeat center 0;background-size:contain">
+                                                                    <table style="width:90%;margin-left:auto;margin-right:auto;border-spacing:0;border-radius:4px;background:#fff;border-radius:10px;border-spacing:0">
+                                                                        <tr>
+                                                                            <td style="padding:20px;text-align:left;">
+                                                                                <table style="width:100%;margin:0;border-spacing:0;">
+                                                                                    <tr>
+                                                                                        <td style="color:#7C888D;font-size:15px;line-height:normal;padding-bottom:20px;">Dear ${traderData.firstname} ${traderData.lastname},</td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <td style="color:#7C888D;font-size:15px;line-height:normal;padding-bottom:40px;">A new maintenance request titled "${request_overview}" has been assigned to you by ${createdByData.firstname} ${createdByData.lastname}.</td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <td style="color:#2E4255;font-size:18px;font-weight:700;line-height:normal;padding:0;margin:0;">Request Details<br><br></td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <td>
+                                                                                            <p style="display:flex;padding-bottom:25px;margin:0;">
+                                                                                                <em style="color:#7C888D;font-size:15px;font-style:italic;line-height:normal;font-weight:300;margin-right:25px;">Address: <strong>${address}</strong></em>
+                                                                                            </p>
+                                                                                            <p style="display:flex;padding-bottom:25px;margin:0;">
+                                                                                                <em style="color:#7C888D;font-size:15px;font-style:italic;line-height:normal;font-weight:300;margin-right:25px;">Budget: <strong>${budget}</strong></em>
+                                                                                            </p>
+                                                                                            <p style="display:flex;padding-bottom:25px;margin:0;">
+                                                                                                <em style="color:#7C888D;font-size:15px;font-style:italic;line-height:normal;font-weight:300;margin-right:25px;">Due Date: <strong>${due_date}</strong></em>
+                                                                                            </p>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <td style="color:#2E4255;font-size:18px;font-weight:700;line-height:normal;padding:0;margin:0;">
+                                                                                            <a target="_blank" href="${Constant.STAGGING_URL}#!/maintance_detail/${maintenance_id}" style="display:block;background:#2AA8D7;width:100px;line-height:28px;color:#fff;font-size:13px;border-radius:4px;text-decoration:none;text-align:center;margin-bottom:15px;">View Request</a><br><br><br>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <td style="color:#7C888D;font-size:15px;line-height:normal;">Thank you,</td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <td style="color:#7C888D;font-size:15px;line-height:normal;">The Ownly Trade team!</td>
+                                                                                    </tr>
+                                                                                </table>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </body>
+                                                    </html>`
+                                            };
+                                            transporter.sendMail(mailOptions, function (error, response) {
+                                                if (error) {
+                                                    console.log("Trader email error: ", error);
+                                                } else {
+                                                    console.log("Trader email sent successfully to: ", traderData.email);
+                                                }
+                                            });
+                                        }
+                                    }
 
+                                    // New email notification for maintenance request creation - Consumer (Inquirer)
+                                    if (createdByData && createdByData.email) {
+                                        let mailOptions = {
+                                            from: Config.EMAIL_FROM,
+                                            to: createdByData.email,
+                                            subject: 'Your Maintenance Request Has Been Created',
+                                            text: 'Your Maintenance Request Has Been Created',
+                                            html: `<!doctype html>
+                                                <html lang="en">
+                                                <head>
+                                                    <meta charset="utf-8">
+                                                    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+                                                    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+                                                    <title>Email</title>
+                                                </head>
+                                                <body>
+                                                    <table style="font-family:Roboto;max-width:800px;width:100%;border-radius:4px;margin:0 auto;border-spacing:0;background:#3b4856;">
+                                                        <tr>
+                                                            <td style="border:0;padding:130px 0 180px 0px;background:#3b4856;border-spacing:0;text-align:center;background:url(${Constant.STAGGING_URL}assets/images/img-001.jpg) no-repeat center 0;background-size:contain">
+                                                                <table style="width:90%;margin-left:auto;margin-right:auto;border-spacing:0;border-radius:4px;background:#fff;border-radius:10px;border-spacing:0">
+                                                                    <tr>
+                                                                        <td style="padding:20px;text-align:left;">
+                                                                            <table style="width:100%;margin:0;border-spacing:0;">
+                                                                                <tr>
+                                                                                    <td style="color:#7C888D;font-size:15px;line-height:normal;padding-bottom:20px;">Dear ${createdByData.firstname} ${createdByData.lastname},</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td style="color:#7C888D;font-size:15px;line-height:normal;padding-bottom:40px;">Your maintenance request titled "${request_overview}" has been successfully created.</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td style="color:#2E4255;font-size:18px;font-weight:700;line-height:normal;padding:0;margin:0;">Request Details<br><br></td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>
+                                                                                        <p style="display:flex;padding-bottom:25px;margin:0;">
+                                                                                            <em style="color:#7C888D;font-size:15px;font-style:italic;line-height:normal;font-weight:300;margin-right:25px;">Address: <strong>${address}</strong></em>
+                                                                                        </p>
+                                                                                        <p style="display:flex;padding-bottom:25px;margin:0;">
+                                                                                            <em style="color:#7C888D;font-size:15px;font-style:italic;line-height:normal;font-weight:300;margin-right:25px;">Budget: <strong>${budget}</strong></em>
+                                                                                        </p>
+                                                                                        <p style="display:flex;padding-bottom:25px;margin:0;">
+                                                                                            <em style="color:#7C888D;font-size:15px;font-style:italic;line-height:normal;font-weight:300;margin-right:25px;">Due Date: <strong>${due_date}</strong></em>
+                                                                                        </p>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td style="color:#2E4255;font-size:18px;font-weight:700;line-height:normal;padding:0;margin:0;">
+                                                                                        <a target="_blank" href="${Constant.STAGGING_URL}#!/maintance_detail/${maintenance_id}" style="display:block;background:#2AA8D7;width:100px;line-height:28px;color:#fff;font-size:13px;border-radius:4px;text-decoration:none;text-align:center;margin-bottom:15px;">View Request</a><br><br><br>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td style="color:#7C888D;font-size:15px;line-height:normal;">Thank you,</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td style="color:#7C888D;font-size:15px;line-height:normal;">The Ownly Trade team!</td>
+                                                                                </tr>
+                                                                            </table>
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </body>
+                                                </html>`
+                                        };
+                                        transporter.sendMail(mailOptions, function (error, response) {
+                                            if (error) {
+                                                console.log("Consumer email error: ", error);
+                                            } else {
+                                                console.log("Consumer email sent successfully to: ", createdByData.email);
+                                            }
+                                        });
+                                    }
 
                                     if (newuserId && newuserId._id && newuserId._id != '') {
                                         console.log('newuserId => ');
                                         var mailOptions = {
-                                            from: Config.EMAIL_FROM, // sender address
-                                            to: email, // list of receivers
-                                            // to: 'jerriranhard@yahoo.com', // list of receivers
-                                            subject: 'Your Ownly Trade service request', // Subject line
-                                            text: 'Your Ownly Trade service request', // plaintext body
-                                            html: '<!doctype html>' +
-                                                '<html lang="en">' +
-                                                '<head>' +
-                                                '<meta charset="utf-8">' +
-                                                '<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">' +
-                                                '<link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">' +
-                                                '<title>Email </title>' +
-                                                '</head>' +
-                                                '<body>' +
-                                                '<table style="font-family:Roboto;max-width:800px;width:100%;border-radius:4px;margin:0 auto;border-spacing:0;background: #3b4856;display: block;">' +
-                                                '<tr>' +
-                                                '<td style="border:0;padding: 130px 0 180px 0px;background:#3b4856;border-spacing:0;text-align:center;background: url(' + Constant.STAGGING_URL + 'assets/images/img-001.jpg) no-repeat center 0;background-size:contain">' +
-                                                '<table style="width:90%;margin-left:auto;margin-right:auto;border-spacing:0;border-radius:4px;background:#fff;border-radius:10px;border-spacing:0">' +
-                                                '<tr>' +
-                                                '<td style="padding:20px; text-align:left;">' +
-                                                '<table style="width:100%; margin:0; border-spacing:0; border-spacing: 0;">' +
-                                                '<tr>' +
-                                                '<td style="color:#7C888D; font-size:15px; line-height:normal; padding-bottom:20px;">Dear ' + firstname + ',</td>' +
-                                                '</tr>' +
-                                                '<tr>' +
-                                                '<td style="color:#7C888D; font-size:15px; line-height:normal; padding-bottom:40px;">Thank you for placing your request through Australia’s newest Trade and Service platform, Ownly Trade. We are delighted to help you find the perfect Trader.</td>' +
-                                                '</tr>' +
-                                                '<tr>' +
-                                                '<td style="color:#7C888D; font-size:15px; line-height:normal; padding-bottom:40px;">Please <a href="' + Constant.PUBLIC_STAGGING_URL + 'consumer_account_activation/' + activation_code + '/' + maintenance_id + '"><b>click here</b></a> to activate your account ' + email + ' and stay up to date with your Trade Request.</td>' +
-                                                '</tr>' +
-                                                '<tr>' +
-                                                '<td style="color:#2E4255; font-size:18px; font-weight:700; line-height:normal; padding:0; margin:0;"><a target="_blank" href="' + Constant.PUBLIC_STAGGING_URL + 'consumer_account_activation/' + activation_code + '/' + maintenance_id + '" style="display:block;background:#2AA8D7; width:150px; line-height:28px; color:#fff; font-size:13px; border-radius:4px; text-decoration:none;text-align:center; margin-bottom:15px;">Activate My Account</a><br></td>' +
-                                                '</tr>' +
-                                                '<tr>' +
-                                                '<td>' +
-                                                '<p style="display:flex; padding-bottom:25px; margin:0;">' +
-                                                '<em style="color:#7C888D; font-size:15px; font-style:italic; line-height:normal; font-weight:300; margin-right:25px;">- Communicate with your trader</em>' +
-                                                '</p>' +
-                                                '<p style="display:flex; padding-bottom:25px; margin:0;">' +
-                                                '<em style="color:#7C888D; font-size:15px; font-style:italic; line-height:normal; font-weight:300; margin-right:25px;">- Add any new files</em>' +
-                                                '</p>' +
-                                                '<p style="display:flex; padding-bottom:25px; margin:0;">' +
-                                                '<em style="color:#7C888D; font-size:15px; font-style:italic; line-height:normal; font-weight:300; margin-right:25px;">- Cancel your request</em>' +
-                                                '</p>' +
-                                                '<p style="display:flex; padding-bottom:25px; margin:0;">' +
-                                                '<em style="color:#7C888D; font-size:15px; font-style:italic; line-height:normal; font-weight:300; margin-right:25px;">- Review your traders work</em>' +
-                                                '</p>' +
-                                                '</td>' +
-                                                '</tr>' +
-                                                '<tr>' +
-                                                '<td style="color:#7C888D; font-size:15px; line-height:normal; padding-bottom:40px;">If you are on mobile, <a href="' + Constant.APP_DOWNLOAD_URL + '"><b>click here</b></a> to download the PropertyCom app featuring the full TradeHub suite.</td>' +
-                                                '</tr>' +
-                                                '<tr>' +
-                                                '<td style="color:#7C888D; font-size:15px; line-height:normal;">Thanks and Welcome to Ownly Trade</td>' +
-                                                '</tr>' +
-                                                '</table>' +
-                                                '</td>' +
-                                                '</tr>' +
-                                                '</table>' +
-                                                '</td>' +
-                                                '</tr>' +
-                                                '</table>' +
-                                                '</body>' +
-                                                '</html>'// html body'
-                                        }
-                                        // console.log("mailOptions  1 ", mailOptions);
-                                        let info = transporter.sendMail({
+                                            from: Config.EMAIL_FROM,
+                                            to: email,
+                                            subject: 'Your Ownly Trade service request',
+                                            text: 'Your Ownly Trade service request',
+                                            html: `<!doctype html>
+                                                <html lang="en">
+                                                <head>
+                                                    <meta charset="utf-8">
+                                                    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+                                                    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+                                                    <title>Email</title>
+                                                </head>
+                                                <body>
+                                                    <table style="font-family:Roboto;max-width:800px;width:100%;border-radius:4px;margin:0 auto;border-spacing:0;background:#3b4856;">
+                                                        <tr>
+                                                            <td style="border:0;padding:130px 0 180px 0px;background:#3b4856;border-spacing:0;text-align:center;background:url(${Constant.STAGGING_URL}assets/images/img-001.jpg) no-repeat center 0;background-size:contain">
+                                                                <table style="width:90%;margin-left:auto;margin-right:auto;border-spacing:0;border-radius:4px;background:#fff;border-radius:10px;border-spacing:0">
+                                                                    <tr>
+                                                                        <td style="padding:20px;text-align:left;">
+                                                                            <table style="width:100%;margin:0;border-spacing:0;">
+                                                                                <tr>
+                                                                                    <td style="color:#7C888D;font-size:15px;line-height:normal;padding-bottom:20px;">Dear ${firstname},</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td style="color:#7C888D;font-size:15px;line-height:normal;padding-bottom:40px;">Thank you for placing your request through Australia’s newest Trade and Service platform, Ownly Trade. We are delighted to help you find the perfect Trader.</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td style="color:#7C888D;font-size:15px;line-height:normal;padding-bottom:40px;">Please <a href="${Constant.PUBLIC_STAGGING_URL}consumer_account_activation/${activation_code}/${maintenance_id}"><b>click here</b></a> to activate your account ${email} and stay up to date with your Trade Request.</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td style="color:#2E4255;font-size:18px;font-weight:700;line-height:normal;padding:0;margin:0;">
+                                                                                        <a target="_blank" href="${Constant.PUBLIC_STAGGING_URL}consumer_account_activation/${activation_code}/${maintenance_id}" style="display:block;background:#2AA8D7;width:150px;line-height:28px;color:#fff;font-size:13px;border-radius:4px;text-decoration:none;text-align:center;margin-bottom:15px;">Activate My Account</a><br>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>
+                                                                                        <p style="display:flex;padding-bottom:25px;margin:0;">
+                                                                                            <em style="color:#7C888D;font-size:15px;font-style:italic;line-height:normal;font-weight:300;margin-right:25px;">- Communicate with your trader</em>
+                                                                                        </p>
+                                                                                        <p style="display:flex;padding-bottom:25px;margin:0;">
+                                                                                            <em style="color:#7C888D;font-size:15px;font-style:italic;line-height:normal;font-weight:300;margin-right:25px;">- Add any new files</em>
+                                                                                        </p>
+                                                                                        <p style="display:flex;padding-bottom:25px;margin:0;">
+                                                                                            <em style="color:#7C888D;font-size:15px;font-style:italic;line-height:normal;font-weight:300;margin-right:25px;">- Cancel your request</em>
+                                                                                        </p>
+                                                                                        <p style="display:flex;padding-bottom:25px;margin:0;">
+                                                                                            <em style="color:#7C888D;font-size:15px;font-style:italic;line-height:normal;font-weight:300;margin-right:25px;">- Review your traders work</em>
+                                                                                        </p>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td style="color:#7C888D;font-size:15px;line-height:normal;padding-bottom:40px;">If you are on mobile, <a href="${Constant.APP_DOWNLOAD_URL}"><b>click here</b></a> to download the PropertyCom app featuring the full TradeHub suite.</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td style="color:#7C888D;font-size:15px;line-height:normal;">Thanks and Welcome to Ownly Trade</td>
+                                                                                </tr>
+                                                                            </table>
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </body>
+                                                </html>`
+                                        };
+                                        transporter.sendMail({
                                             from: mailOptions.from,
                                             to: mailOptions.to,
                                             subject: mailOptions.subject,
@@ -3555,21 +4603,11 @@ function addMR(req, res) {
                                         }, function (error, response) {
                                             console.log("===============================");
                                             if (error) {
-                                                console.log("eeeeee", error);
+                                                console.log("New user email error: ", error);
                                             } else {
-                                                console.log("Message sent: Successfully  1 ==========> check here ", mailOptions.to);
+                                                console.log("Message sent: Successfully 1 ==========> check here ", mailOptions.to);
                                             }
                                         });
-
-                                        // sendmail({
-                                        //     from: mailOptions.from,
-                                        //     to: mailOptions.to,
-                                        //     subject: mailOptions.subject,
-                                        //     html: mailOptions.html,
-                                        // }, function (err3, response) {
-                                        //     if (err3) { } else {
-                                        //     }
-                                        // });
                                     } else {
                                         console.log('newuserId :: else => ');
                                     }
@@ -3577,12 +4615,9 @@ function addMR(req, res) {
                                     var add_conditions = { maintenance: maintenance_id };
                                     await Address.findOne({ GNAFId: addData.GNAFId }, { GNAFId: 1, trader: 1 }, async function (err6, address_exist) {
                                         if (err6) {
-
                                         } else {
                                             if (address_exist) {
                                                 console.log('trader_id => ', trader_id);
-                                                // console.log('address_exist.trader => ', address_exist.trader);
-                                                // if (address_exist.trader && address_exist.trader != '' && trader_id && trader_id != '') {
                                                 if (trader_id && trader_id != '') {
                                                     console.log('existing trader => ');
                                                     var exist_trader = false;
@@ -3595,295 +4630,259 @@ function addMR(req, res) {
                                                         add_conditions.trader = mongoose.Types.ObjectId(trader_id);
                                                     }
                                                 }
-                                                // Push MR ID in Existing
                                                 await Address.update(
                                                     { GNAFId: addData.GNAFId },
                                                     { $push: add_conditions },
-                                                    function (err, data) {
-
-                                                    });
+                                                    function (err, data) {}
+                                                );
                                             } else {
                                                 if (trader_id && trader_id != '')
                                                     addData.trader = mongoose.Types.ObjectId(trader_id);
-
                                                 addData.maintenance = mongoose.Types.ObjectId(maintenance_id);
                                                 var addAddress = new Address(addData);
-                                                await addAddress.save(function (err7, addrData) {
-                                                });
+                                                await addAddress.save(function (err7, addrData) {});
                                             }
                                         }
                                     });
 
                                     if (trader_id && trader_id != '') {
-                                        // Send Mail to specific Trader
                                         var quote_link = Constant.STAGGING_URL + '#!/maintance_detail/' + maintenance_id;
+                                        var conditions = { 'is_deleted': false, '_id': mongoose.Types.ObjectId(trader_id) };
                                         if (category_id != '') {
-                                            var conditions = { 'is_deleted': false, '_id': mongoose.Types.ObjectId(trader_id) };
-                                            if (category_id != '') {
-                                                conditions.categories_id = mongoose.Types.ObjectId(category_id);
-                                            }
-
-                                            User.find(conditions)
-                                                // .select('_id, email, is_active')
-                                                .exec(async function (err, userTraderData) {
-
-                                                    if (err) {
-
-                                                    }
-                                                    else {
-
-                                                        var Traderdata_ = _.pluck(userTraderData, '_id');
-                                                        var traderLog = { mail_send_trader_id: Traderdata_ };
-
-                                                        maintentenance_traders_log.update(
-                                                            { maintenance_id: mongoose.Types.ObjectId(maintenance_id) },
-                                                            { $push: traderLog },
-                                                            function (err__, log_data) {
-                                                                // console.log("err   ", err__)
-                                                                // console.log("update data   ", log_data);
-                                                            });
-                                                        console.log('createdByData ======1111111111111111111111111111=====> ', createdByData);
-                                                        console.log('Traderdata_ :: Direct Request =========================> ', Traderdata_);
-                                                        var to_users = [{
-                                                            "users_id": mongoose.Types.ObjectId(Traderdata_[0])
-                                                        }];
-                                                        console.log('to_users => ', to_users);
-                                                        // Add Notification For Direct MR
-                                                        var notiObj = {};
-                                                        notiObj.subject = req.body.request_overview + " - new maintenance request has been added by " + createdByData.firstname + " " + createdByData.lastname;
-                                                        notiObj.message = maintenanaceData.address;
-                                                        notiObj.from_user = mongoose.Types.ObjectId(createdByData._id);
-                                                        notiObj.to_users = to_users;
-                                                        notiObj.type = Constant.NOTIFICATION_TYPE_MAINTENENCE_REQ;
-                                                        notiObj.maintenence_id = maintenanaceData._id;
-                                                        notiObj.module = 2;
-                                                        var notification = new NotificationInfo(notiObj);
-                                                        notification.save(function (notErr, notData) {
-                                                            if (notErr) {
-                                                                console.log('notErr :: Error occured while adding notification => ', notErr);
-                                                                // res.json({ code: Constant.ERROR_CODE, message: Constant.INTERNAL_ERROR });
-                                                            } else {
-                                                                // res.json({ code: Constant.SUCCESS_CODE, data: data });
-                                                                console.log('successfully added notification => ', notData);
-                                                            }
-                                                        });
-                                                        if (userTraderData) {
-                                                            userTraderData.map(async function (value, key) {
-                                                                // console.log('value :: trader data=> ', value);
-
-                                                                var { business_name } = value;
-                                                                if (value.is_active == true) {
-                                                                    // working code for email sending
-                                                                    var mailOptions = {
-                                                                        from: Config.EMAIL_FROM, // sender address
-                                                                        to: value.email, // list of receivers
-                                                                        // to: 'jerriranhard@yahoo.com', // list of receivers
-                                                                        subject: mail_title, // Subject line
-                                                                        text: mail_title, // plaintext body
-                                                                        html: '<!doctype html>' +
-                                                                            '<html lang="en">' +
-                                                                            '<head>' +
-                                                                            '<meta charset="utf-8">' +
-                                                                            '<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">' +
-                                                                            '<link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">' +
-                                                                            '<title>Email </title>' +
-                                                                            '</head>' +
-                                                                            '<body>' +
-                                                                            '<table style="font-family:Roboto;max-width:800px;width:100%;border-radius:4px;margin:0 auto;border-spacing:0;background: #3b4856;display: block;">' +
-                                                                            '<tr>' +
-                                                                            '<td style="border:0;padding: 130px 0 180px 0px;background:#3b4856;border-spacing:0;text-align:center;background: url(' + Constant.STAGGING_URL + 'assets/images/img-001.jpg) no-repeat center 0;background-size:contain">' +
-                                                                            '<table style="width:90%;margin-left:auto;margin-right:auto;border-spacing:0;border-radius:4px;background:#fff;border-radius:10px;border-spacing:0">' +
-                                                                            '<tr>' +
-                                                                            '<td style="padding:20px; text-align:left;">' +
-                                                                            '<table style="width:100%; margin:0; border-spacing:0; border-spacing: 0;">' +
-                                                                            '<tr>' +
-                                                                            '<td style="color:#7C888D; font-size:15px; line-height:normal; padding-bottom:20px;">Dear ' + changeCase.sentenceCase(business_name) + ',</td>' +
-                                                                            '</tr>' +
-                                                                            '<tr>' +
-                                                                            '<td style="color:#7C888D; font-size:15px; line-height:normal; padding-bottom:40px;">One of our users on the Ownly Trade platform has viewed your profile and would like you to quote on a new job.</td>' +
-                                                                            '</tr>' +
-                                                                            '<tr>' +
-                                                                            '<td style="color:#2E4255; font-size:18px; font-weight:700; line-height:normal; padding:0; margin:0;">Job details<br><br></td>' +
-                                                                            '</tr>' +
-                                                                            '<tr>' +
-                                                                            '<td>' +
-                                                                            '<p style="display:flex; padding-bottom:25px; margin:0;">' +
-                                                                            '<em style="color:#7C888D; font-size:15px; font-style:italic; line-height:normal; font-weight:300; margin-right:25px;">Title: ' + '<strong>' + request_overview + '</strong>' + '</em>' +
-                                                                            '</p>' +
-                                                                            '<p style="display:flex; padding-bottom:25px; margin:0;">' +
-                                                                            '<em style="color:#7C888D; font-size:15px; font-style:italic; line-height:normal; font-weight:300; margin-right:25px;">Description: ' + '<strong>' + request_detail + '</strong>' + '</em>' +
-                                                                            '</p>' +
-                                                                            '<p style="display:flex; padding-bottom:25px; margin:0;">' +
-                                                                            '<em style="color:#7C888D; font-size:15px; font-style:italic; line-height:normal; font-weight:300; margin-right:25px;">Budget: ' + '<strong>' + budget + '</strong>' + '</em>' +
-                                                                            '</p>' +
-                                                                            '<p style="display:flex; padding-bottom:25px; margin:0;">' +
-                                                                            '<em style="color:#7C888D; font-size:15px; font-style:italic; line-height:normal; font-weight:300; margin-right:25px;">Due Date: ' + '<strong>' + due_date + '</strong>' + '</em>' +
-                                                                            '</p>' +
-                                                                            '</td>' +
-                                                                            '</tr>' +
-                                                                            '<tr>' +
-                                                                            '<td style="color:#2E4255; font-size:18px; font-weight:500; line-height:normal; padding:0; margin:0;">If you would like to quote on this job please <a target="_blank" href="' + quote_link + '">click here</a> to communicate with the customer and submit your quote!<br><br></td>' +
-                                                                            '</tr>' +
-                                                                            '<tr>' +
-                                                                            '<td style="color:#2E4255; font-size:18px; font-weight:700; line-height:normal; padding:0; margin:0;"><a target="_blank" href="' + quote_link + '" style="display:block;background:#2AA8D7; width:100px; line-height:28px; color:#fff; font-size:13px; border-radius:4px; text-decoration:none;text-align:center; margin-bottom:15px;">Quote Now</a><br /><br /><br /></td>' +
-                                                                            '</tr>' +
-                                                                            '<tr>' +
-                                                                            '<td style="color:#7C888D; font-size:15px; line-height:normal;">Thank you,</td>' +
-                                                                            '</tr>' +
-                                                                            '<tr>' +
-                                                                            '<td style="color:#7C888D; font-size:15px; line-height:normal;">The Ownly Trade team!</td>' +
-                                                                            '</tr>' +
-                                                                            '</table>' +
-                                                                            '</td>' +
-                                                                            '</tr>' +
-                                                                            '</table>' +
-                                                                            '</td>' +
-                                                                            '</tr>' +
-                                                                            '</table>' +
-                                                                            '</body>' +
-                                                                            '</html>'
-                                                                    };
-                                                                    let info = transporter.sendMail({
-                                                                        from: mailOptions.from,
-                                                                        to: mailOptions.to,
-                                                                        subject: mailOptions.subject,
-                                                                        text: mailOptions.subject,
-                                                                        html: mailOptions.html
-                                                                    }, function (error, response) {
-                                                                        if (error) {
-                                                                            console.log("eeeeee", error);
-                                                                        } else {
-                                                                            let msgOptions = {
-                                                                                mobile_no: value.mobile_no,
-                                                                                business_name: value.business_name,
-                                                                                title: maintenanaceData.request_overview,
-                                                                                budget: maintenanaceData.budget,
-                                                                                quote_link: quote_link
-                                                                            }
-                                                                            console.log('maintenanaceData :: addMR=> ', maintenanaceData);
-
-                                                                            console.log("Message sent: Successfully  2 ", mailOptions.to);
-                                                                            console.log('Options for Text message=> ', msgOptions);
-                                                                            sms.JobRequestMsg(msgOptions);
-                                                                        }
-                                                                    });
-                                                                    // working code for email sending
-
-
-
-                                                                } else {
-                                                                    // var activation_code = Math.random().toString(36).substring(2, 10) + Math.random().toString(36).substring(2, 10);
-                                                                    var activation_code = value.activation_code;
-                                                                    var click_here = Constant.PUBLIC_STAGGING_URL + 'trader_account_activation/' + activation_code + '/' + maintenance_id;
-                                                                    // var updateUserRecord = {
-                                                                    //     activation_code: activation_code
-                                                                    // }
-                                                                    // User.update({ _id: userTraderData._id }, { $set: updateUserRecord }, function (err) {
-                                                                    // });
-
-                                                                    var mailOptions = {
-                                                                        from: Config.EMAIL_FROM, // sender address
-                                                                        to: value.email, // list of receivers
-                                                                        // to: 'jerriranhard@yahoo.com',
-                                                                        subject: value.firstname + ' ' + value.lastname + '- NEW QUOTE REQUEST', // Subject line
-                                                                        text: value.firstname + ' ' + value.lastname + '- NEW QUOTE REQUEST', // plaintext body
-                                                                        html: '<!doctype html>' +
-                                                                            '<html lang="en">' +
-                                                                            '<head>' +
-                                                                            '<meta charset="utf-8">' +
-                                                                            '<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">' +
-                                                                            '<link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">' +
-                                                                            '<title>Email </title>' +
-                                                                            '</head>' +
-                                                                            '<body>' +
-                                                                            '<table style="font-family:Roboto;max-width:800px;width:100%;border-radius:4px;margin:0 auto;border-spacing:0;background: #3b4856;display: block;">' +
-                                                                            '<tr>' +
-                                                                            '<td style="border:0;padding: 130px 0 180px 0px;background:#3b4856;border-spacing:0;text-align:center;background: url(' + Constant.STAGGING_URL + 'assets/images/img-001.jpg) no-repeat center 0;background-size:contain">' +
-                                                                            '<table style="width:90%;margin-left:auto;margin-right:auto;border-spacing:0;border-radius:4px;background:#fff;border-radius:10px;border-spacing:0">' +
-                                                                            '<tr>' +
-                                                                            '<td style="padding:20px; text-align:left;">' +
-                                                                            '<table style="width:100%; margin:0; border-spacing:0; border-spacing: 0;">' +
-                                                                            '<tr>' +
-                                                                            '<td style="color:#7C888D; font-size:15px; line-height:normal; padding-bottom:20px;">Good news travels fast! Ownly wants to connect as someone is interested in using your services.</td>' +
-                                                                            '</tr>' +
-                                                                            '<tr>' +
-                                                                            '<td style="color:#7C888D; font-size:15px; line-height:normal; padding-bottom:40px;">As you know, unlike other search platforms, we give all <b>TRADES A FAIR GO.</b> We help you <b>PROMOTE, SECURE</b> AND <b>GROW</b> YOUR BUSINESS.</td>' +
-                                                                            '</tr>' +
-                                                                            '<tr>' +
-                                                                            '<td style="padding:25px;" >' +
-                                                                            ' <table style="width:100%; margin:0 auto; border:0; border-spacing:0; text-align:left;">' +
-                                                                            ' <tr><td style="padding:0 0 30px;font-size:16px; color:#606382; font-weight:normal;"><strong>What’s even better?</strong></td></tr>' +
-                                                                            ' <tr><td style="font-size:16px; color:#606382; font-weight:normal; padding:0 0 20px 40px;"><div style="width:8px; height:8px; background:#606382; display:inline-block; border-radius:100px; margin:0 10px 0 0;"></div>Our trade innovation platform is completely free to use! </td></tr>' +
-                                                                            ' <tr><td style="font-size:16px; color:#606382; font-weight:normal; padding:0 0 20px 40px;"><div style="width:8px; height:8px; background:#606382; display:inline-block; border-radius:100px; margin:0 10px 0 0;"></div>Connecting you to thousands of new business opportunities</td></tr>' +
-                                                                            ' <tr><td style="font-size:16px; color:#606382; font-weight:normal; padding:0 0 20px 40px;"><div style="width:8px; height:8px; background:#606382; display:inline-block; border-radius:100px; margin:0 10px 0 0;"></div>UNLIMITED quotes</td></tr>' +
-                                                                            ' <tr><td style="font-size:16px; color:#606382; font-weight:normal; padding:0 0 20px 40px;"><div style="width:8px; height:8px; background:#606382; display:inline-block; border-radius:100px; margin:0 10px 0 0;"></div>No booking fees or taking a share of your hard-earned revenue</td></tr>' +
-                                                                            ' <tr><td style="font-size:16px; color:#606382; font-weight:normal; padding:0 0 20px 40px;"><div style="width:8px; height:8px; background:#606382; display:inline-block; border-radius:100px; margin:0 10px 0 0;"></div>Giving your business exposure by saving your work to a property file so the next owner/tenant/property manager can recall you with a click of a button</td></tr>' +
-                                                                            ' <tr><td style="font-size:16px; color:#606382; font-weight:normal; padding:0 0 20px 40px;"><div style="width:8px; height:8px; background:#606382; display:inline-block; border-radius:100px; margin:0 10px 0 0;"></div>Connecting you to new markets–strata managers, property managers which no other trade platform has done before!</td></tr>' +
-                                                                            '</table >' +
-                                                                            '</td>' +
-                                                                            '</tr>' +
-                                                                            '<tr>' +
-                                                                            '<td style="color:#2E4255; font-size:15px; font-weight:500; line-height:normal; padding:0 0 20px; margin:0;">You are one step away from responding to your quote request and securing your next potential job:<br></td>' +
-                                                                            '</tr>' +
-                                                                            '<tr>' +
-                                                                            '<td style="color:#2E4255; font-size:15px; font-weight:700; line-height:normal; padding:0 0 20px; margin:0;"><a target="_blank" href="' + click_here + '" style="display:block;background:#2AA8D7; width:100px; line-height:28px; color:#fff; font-size:13px; border-radius:4px; text-decoration:none;text-align:center; margin-bottom:15px;">Quote Now</a><br /><br /><br /></td>' +
-                                                                            '</tr>' +
-                                                                            '<tr>' +
-                                                                            '<td style="color:#7C888D; font-size:15px; line-height:normal;">Thank you,</td>' +
-                                                                            '</tr>' +
-                                                                            '<tr>' +
-                                                                            '<td style="color:#7C888D; font-size:15px; line-height:normal;">The Ownly Trade team!</td>' +
-                                                                            '</tr>' +
-                                                                            '</table>' +
-                                                                            '</td>' +
-                                                                            '</tr>' +
-                                                                            '</table>' +
-                                                                            '</td>' +
-                                                                            '</tr>' +
-                                                                            '</table>' +
-                                                                            '</body>' +
-                                                                            '</html>'
-                                                                    };
-                                                                    let info = transporter.sendMail({
-                                                                        from: mailOptions.from,
-                                                                        to: mailOptions.to,
-                                                                        subject: mailOptions.subject,
-                                                                        text: mailOptions.subject,
-                                                                        html: mailOptions.html
-                                                                    }, function (error, response) {
-                                                                        console.log("===============================");
-                                                                        if (error) {
-                                                                            console.log("eeeeee", error);
-                                                                        } else {
-                                                                            let msgOptions = {
-                                                                                mobile_no: value.mobile_no,
-                                                                                business_name: value.business_name,
-                                                                                title: maintenanaceData.request_overview,
-                                                                                budget: maintenanaceData.budget,
-                                                                                quote_link: click_here
-                                                                            }
-                                                                            console.log("Message sent: Successfully  3 ", mailOptions.to);
-                                                                            sms.JobRequestMsg(msgOptions);
-                                                                        }
-                                                                    });
-
-                                                                }
-                                                            });
-                                                        }
-                                                    }
-                                                });
+                                            conditions.categories_id = mongoose.Types.ObjectId(category_id);
                                         }
 
+                                        User.find(conditions)
+                                            .exec(async function (err, userTraderData) {
+                                                if (err) {
+                                                } else {
+                                                    var Traderdata_ = _.pluck(userTraderData, '_id');
+                                                    var traderLog = { mail_send_trader_id: Traderdata_ };
+                                                    maintentenance_traders_log.update(
+                                                        { maintenance_id: mongoose.Types.ObjectId(maintenance_id) },
+                                                        { $push: traderLog },
+                                                        function (err__, log_data) {}
+                                                    );
+                                                    console.log('createdByData ======1111111111111111111111111111=====> ', createdByData);
+                                                    console.log('Traderdata_ :: Direct Request =========================> ', Traderdata_);
+                                                    var to_users = [{
+                                                        "users_id": mongoose.Types.ObjectId(Traderdata_[0])
+                                                    }];
+                                                    console.log('to_users => ', to_users);
+                                                    var notiObj = {};
+                                                    notiObj.subject = req.body.request_overview + " - new maintenance request has been added by " + createdByData.firstname + " " + createdByData.lastname;
+                                                    notiObj.message = maintenanaceData.address;
+                                                    notiObj.from_user = mongoose.Types.ObjectId(createdByData._id);
+                                                    notiObj.to_users = to_users;
+                                                    notiObj.type = Constant.NOTIFICATION_TYPE_MAINTENENCE_REQ;
+                                                    notiObj.maintenence_id = maintenanaceData._id;
+                                                    notiObj.module = 2;
+                                                    var notification = new NotificationInfo(notiObj);
+                                                    notification.save(function (notErr, notData) {
+                                                        if (notErr) {
+                                                            console.log('notErr :: Error occurred while adding notification => ', notErr);
+                                                        } else {
+                                                            console.log('successfully added notification => ', notData);
+                                                        }
+                                                    });
+                                                    if (userTraderData) {
+                                                        userTraderData.map(async function (value, key) {
+                                                            var { business_name } = value;
+                                                            if (value.is_active == true) {
+                                                                var mailOptions = {
+                                                                    from: Config.EMAIL_FROM,
+                                                                    to: value.email,
+                                                                    subject: mail_title,
+                                                                    text: mail_title,
+                                                                    html: `<!doctype html>
+                                                                        <html lang="en">
+                                                                        <head>
+                                                                            <meta charset="utf-8">
+                                                                            <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+                                                                            <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+                                                                            <title>Email</title>
+                                                                        </head>
+                                                                        <body>
+                                                                            <table style="font-family:Roboto;max-width:800px;width:100%;border-radius:4px;margin:0 auto;border-spacing:0;background:#3b4856;">
+                                                                                <tr>
+                                                                                    <td style="border:0;padding:130px 0 180px 0px;background:#3b4856;border-spacing:0;text-align:center;background:url(${Constant.STAGGING_URL}assets/images/img-001.jpg) no-repeat center 0;background-size:contain">
+                                                                                        <table style="width:90%;margin-left:auto;margin-right:auto;border-spacing:0;border-radius:4px;background:#fff;border-radius:10px;border-spacing:0">
+                                                                                            <tr>
+                                                                                                <td style="padding:20px;text-align:left;">
+                                                                                                    <table style="width:100%;margin:0;border-spacing:0;">
+                                                                                                        <tr>
+                                                                                                            <td style="color:#7C888D;font-size:15px;line-height:normal;padding-bottom:20px;">Dear ${changeCase.sentenceCase(business_name)},</td>
+                                                                                                        </tr>
+                                                                                                        <tr>
+                                                                                                            <td style="color:#7C888D;font-size:15px;line-height:normal;padding-bottom:40px;">One of our users on the Ownly Trade platform has viewed your profile and would like you to quote on a new job.</td>
+                                                                                                        </tr>
+                                                                                                        <tr>
+                                                                                                            <td style="color:#2E4255;font-size:18px;font-weight:700;line-height:normal;padding:0;margin:0;">Job details<br><br></td>
+                                                                                                        </tr>
+                                                                                                        <tr>
+                                                                                                            <td>
+                                                                                                                <p style="display:flex;padding-bottom:25px;margin:0;">
+                                                                                                                    <em style="color:#7C888D;font-size:15px;font-style:italic;line-height:normal;font-weight:300;margin-right:25px;">Title: <strong>${request_overview}</strong></em>
+                                                                                                                </p>
+                                                                                                                <p style="display:flex;padding-bottom:25px;margin:0;">
+                                                                                                                    <em style="color:#7C888D;font-size:15px;font-style:italic;line-height:normal;font-weight:300;margin-right:25px;">Description: <strong>${request_detail}</strong></em>
+                                                                                                                </p>
+                                                                                                                <p style="display:flex;padding-bottom:25px;margin:0;">
+                                                                                                                    <em style="color:#7C888D;font-size:15px;font-style:italic;line-height:normal;font-weight:300;margin-right:25px;">Budget: <strong>${budget}</strong></em>
+                                                                                                                </p>
+                                                                                                                <p style="display:flex;padding-bottom:25px;margin:0;">
+                                                                                                                    <em style="color:#7C888D;font-size:15px;font-style:italic;line-height:normal;font-weight:300;margin-right:25px;">Due Date: <strong>${due_date}</strong></em>
+                                                                                                                </p>
+                                                                                                            </td>
+                                                                                                        </tr>
+                                                                                                        <tr>
+                                                                                                            <td style="color:#2E4255;font-size:18px;font-weight:500;line-height:normal;padding:0;margin:0;">If you would like to quote on this job please <a target="_blank" href="${quote_link}">click here</a> to communicate with the customer and submit your quote!<br><br></td>
+                                                                                                        </tr>
+                                                                                                        <tr>
+                                                                                                            <td style="color:#2E4255;font-size:18px;font-weight:700;line-height:normal;padding:0;margin:0;">
+                                                                                                                <a target="_blank" href="${quote_link}" style="display:block;background:#2AA8D7;width:100px;line-height:28px;color:#fff;font-size:13px;border-radius:4px;text-decoration:none;text-align:center;margin-bottom:15px;">Quote Now</a><br><br><br>
+                                                                                                            </td>
+                                                                                                        </tr>
+                                                                                                        <tr>
+                                                                                                            <td style="color:#7C888D;font-size:15px;line-height:normal;">Thank you,</td>
+                                                                                                        </tr>
+                                                                                                        <tr>
+                                                                                                            <td style="color:#7C888D;font-size:15px;line-height:normal;">The Ownly Trade team!</td>
+                                                                                                        </tr>
+                                                                                                    </table>
+                                                                                                </td>
+                                                                                            </tr>
+                                                                                        </table>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </table>
+                                                                        </body>
+                                                                        </html>`
+                                                                };
+                                                                transporter.sendMail({
+                                                                    from: mailOptions.from,
+                                                                    to: mailOptions.to,
+                                                                    subject: mailOptions.subject,
+                                                                    text: mailOptions.subject,
+                                                                    html: mailOptions.html
+                                                                }, function (error, response) {
+                                                                    if (error) {
+                                                                        console.log("Trader quote email error: ", error);
+                                                                    } else {
+                                                                        let msgOptions = {
+                                                                            mobile_no: value.mobile_no,
+                                                                            business_name: value.business_name,
+                                                                            title: maintenanaceData.request_overview,
+                                                                            budget: maintenanaceData.budget,
+                                                                            quote_link: quote_link
+                                                                        }
+                                                                        console.log('maintenanaceData :: addMR=> ', maintenanaceData);
+                                                                        console.log("Message sent: Successfully 2 ", mailOptions.to);
+                                                                        console.log('Options for Text message=> ', msgOptions);
+                                                                        sms.JobRequestMsg(msgOptions);
+                                                                    }
+                                                                });
+                                                            } else {
+                                                                var activation_code = value.activation_code;
+                                                                var click_here = Constant.PUBLIC_STAGGING_URL + 'trader_account_activation/' + activation_code + '/' + maintenance_id;
+                                                                var mailOptions = {
+                                                                    from: Config.EMAIL_FROM,
+                                                                    to: value.email,
+                                                                    subject: value.firstname + ' ' + value.lastname + '- NEW QUOTE REQUEST',
+                                                                    text: value.firstname + ' ' + value.lastname + '- NEW QUOTE REQUEST',
+                                                                    html: `<!doctype html>
+                                                                        <html lang="en">
+                                                                        <head>
+                                                                            <meta charset="utf-8">
+                                                                            <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+                                                                            <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+                                                                            <title>Email</title>
+                                                                        </head>
+                                                                        <body>
+                                                                            <table style="font-family:Roboto;max-width:800px;width:100%;border-radius:4px;margin:0 auto;border-spacing:0;background:#3b4856;">
+                                                                                <tr>
+                                                                                    <td style="border:0;padding:130px 0 180px 0px;background:#3b4856;border-spacing:0;text-align:center;background:url(${Constant.STAGGING_URL}assets/images/img-001.jpg) no-repeat center 0;background-size:contain">
+                                                                                        <table style="width:90%;margin-left:auto;margin-right:auto;border-spacing:0;border-radius:4px;background:#fff;border-radius:10px;border-spacing:0">
+                                                                                            <tr>
+                                                                                                <td style="padding:20px;text-align:left;">
+                                                                                                    <table style="width:100%;margin:0;border-spacing:0;">
+                                                                                                        <tr>
+                                                                                                            <td style="color:#7C888D;font-size:15px;line-height:normal;padding-bottom:20px;">Good news travels fast! Ownly wants to connect as someone is interested in using your services.</td>
+                                                                                                        </tr>
+                                                                                                        <tr>
+                                                                                                            <td style="color:#7C888D;font-size:15px;line-height:normal;padding-bottom:40px;">As you know, unlike other search platforms, we give all <b>TRADES A FAIR GO.</b> We help you <b>PROMOTE, SECURE</b> AND <b>GROW</b> YOUR BUSINESS.</td>
+                                                                                                        </tr>
+                                                                                                        <tr>
+                                                                                                            <td style="padding:25px;">
+                                                                                                                <table style="width:100%;margin:0 auto;border:0;border-spacing:0;text-align:left;">
+                                                                                                                    <tr><td style="padding:0 0 30px;font-size:16px;color:#606382;font-weight:normal;"><strong>What’s even better?</strong></td></tr>
+                                                                                                                    <tr><td style="font-size:16px;color:#606382;font-weight:normal;padding:0 0 20px 40px;"><div style="width:8px;height:8px;background:#606382;display:inline-block;border-radius:100px;margin:0 10px 0 0;"></div>Our trade innovation platform is completely free to use!</td></tr>
+                                                                                                                    <tr><td style="font-size:16px;color:#606382;font-weight:normal;padding:0 0 20px 40px;"><div style="width:8px;height:8px;background:#606382;display:inline-block;border-radius:100px;margin:0 10px 0 0;"></div>Connecting you to thousands of new business opportunities</td></tr>
+                                                                                                                    <tr><td style="font-size:16px;color:#606382;font-weight:normal;padding:0 0 20px 40px;"><div style="width:8px;height:8px;background:#606382;display:inline-block;border-radius:100px;margin:0 10px 0 0;"></div>UNLIMITED quotes</td></tr>
+                                                                                                                    <tr><td style="font-size:16px;color:#606382;font-weight:normal;padding:0 0 20px 40px;"><div style="width:8px;height:8px;background:#606382;display:inline-block;border-radius:100px;margin:0 10px 0 0;"></div>No booking fees or taking a share of your hard-earned revenue</td></tr>
+                                                                                                                    <tr><td style="font-size:16px;color:#606382;font-weight:normal;padding:0 0 20px 40px;"><div style="width:8px;height:8px;background:#606382;display:inline-block;border-radius:100px;margin:0 10px 0 0;"></div>Giving your business exposure by saving your work to a property file so the next owner/tenant/property manager can recall you with a click of a button</td></tr>
+                                                                                                                    <tr><td style="font-size:16px;color:#606382;font-weight:normal;padding:0 0 20px 40px;"><div style="width:8px;height:8px;background:#606382;display:inline-block;border-radius:100px;margin:0 10px 0 0;"></div>Connecting you to new markets–strata managers, property managers which no other trade platform has done before!</td></tr>
+                                                                                                                </table>
+                                                                                                            </td>
+                                                                                                        </tr>
+                                                                                                        <tr>
+                                                                                                            <td style="color:#2E4255;font-size:15px;font-weight:500;line-height:normal;padding:0 0 20px;margin:0;">You are one step away from responding to your quote request and securing your next potential job:<br></td>
+                                                                                                        </tr>
+                                                                                                        <tr>
+                                                                                                            <td style="color:#2E4255;font-size:15px;font-weight:700;line-height:normal;padding:0 0 20px;margin:0;">
+                                                                                                                <a target="_blank" href="${click_here}" style="display:block;background:#2AA8D7;width:100px;line-height:28px;color:#fff;font-size:13px;border-radius:4px;text-decoration:none;text-align:center;margin-bottom:15px;">Quote Now</a><br><br><br>
+                                                                                                            </td>
+                                                                                                        </tr>
+                                                                                                        <tr>
+                                                                                                            <td style="color:#7C888D;font-size:15px;line-height:normal;">Thank you,</td>
+                                                                                                        </tr>
+                                                                                                        <tr>
+                                                                                                            <td style="color:#7C888D;font-size:15px;line-height:normal;">The Ownly Trade team!</td>
+                                                                                                        </tr>
+                                                                                                    </table>
+                                                                                                </td>
+                                                                                            </tr>
+                                                                                        </table>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </table>
+                                                                        </body>
+                                                                        </html>`
+                                                                };
+                                                                transporter.sendMail({
+                                                                    from: mailOptions.from,
+                                                                    to: mailOptions.to,
+                                                                    subject: mailOptions.subject,
+                                                                    text: mailOptions.subject,
+                                                                    html: mailOptions.html
+                                                                }, function (error, response) {
+                                                                    console.log("===============================");
+                                                                    if (error) {
+                                                                        console.log("Inactive trader email error: ", error);
+                                                                    } else {
+                                                                        let msgOptions = {
+                                                                            mobile_no: value.mobile_no,
+                                                                            business_name: value.business_name,
+                                                                            title: maintenanaceData.request_overview,
+                                                                            budget: maintenanaceData.budget,
+                                                                            quote_link: click_here
+                                                                        }
+                                                                        console.log("Message sent: Successfully 3 ", mailOptions.to);
+                                                                        sms.JobRequestMsg(msgOptions);
+                                                                    }
+                                                                });
+                                                            }
+                                                        });
+                                                    }
+                                                }
+                                            });
                                     } else {
                                         console.log('no trade id => ');
                                         var quote_link = Constant.STAGGING_URL + '#!/maintance_detail/' + maintenance_id;
-                                        // Send Mail to within specified km Traders
-
                                         conditions = { 'is_deleted': false };
                                         console.log('latitude :: Check Here => ', latitude);
                                         console.log('longitude :: Check Here => ', longitude);
                                         if (longitude && longitude != '' && latitude && latitude != '') {
-
                                             conditions.location = {
                                                 $geoWithin: {
                                                     $centerSphere: [
@@ -3894,28 +4893,19 @@ function addMR(req, res) {
                                         }
 
                                         if (category_id != '') {
-                                            //console.log("category_id   ", category_id);
                                             conditions.categories_id = mongoose.Types.ObjectId(category_id);
                                         }
-                                        //console.log("Data      ", JSON.stringify(conditions));
                                         var parser = User.find(conditions)
                                             .exec(async function (err, userData) {
-                                                // console.log("Here to call", userData);
-                                                // console.log("Here to call err ", err);
-
                                                 if (!err) {
-
                                                     var Traderdata_ = _.pluck(userData, '_id');
                                                     console.log('Traderdata_ ===================> ', Traderdata_);
                                                     var traderLog = { mail_send_trader_id: Traderdata_ };
-
                                                     maintentenance_traders_log.update(
                                                         { maintenance_id: mongoose.Types.ObjectId(maintenance_id) },
                                                         { $push: traderLog },
-                                                        function (err__, log_data) {
-                                                            // console.log("err   ", err__)
-                                                            // console.log("update data   ", log_data);
-                                                        });
+                                                        function (err__, log_data) {}
+                                                    );
                                                     console.log("userData.length ==>", userData.length);
 
                                                     let traders_arr = [];
@@ -3923,10 +4913,8 @@ function addMR(req, res) {
                                                         traders_arr.push({ "users_id": mongoose.Types.ObjectId(ele) })
                                                     })
                                                     console.log('traders_arr =========================> ', traders_arr);
-
                                                     console.log('createdByData ======2222222222222222222222222====> ', createdByData);
 
-                                                    // Add Notification For Direct MR
                                                     var notiObj = {};
                                                     notiObj.subject = req.body.request_overview + " - new maintenance request has been added by " + createdByData.firstname + " " + createdByData.lastname;
                                                     notiObj.message = maintenanaceData.address;
@@ -3938,16 +4926,13 @@ function addMR(req, res) {
                                                     var notification = new NotificationInfo(notiObj);
                                                     notification.save(function (notErr, notData) {
                                                         if (notErr) {
-                                                            console.log('notErr :: Error occured while adding notification => ', notErr);
-                                                            // res.json({ code: Constant.ERROR_CODE, message: Constant.INTERNAL_ERROR });
+                                                            console.log('notErr :: Error occurred while adding notification => ', notErr);
                                                         } else {
-                                                            // res.json({ code: Constant.SUCCESS_CODE, data: data });
                                                             console.log('successfully added notification => ', notData);
                                                         }
                                                     });
                                                     var key = 1;
                                                     for (const value of userData) {
-
                                                         let msgOptions = {
                                                             mobile_no: value.mobile_no,
                                                             business_name: value.business_name,
@@ -3955,92 +4940,82 @@ function addMR(req, res) {
                                                             budget: maintenanaceData.budget,
                                                             quote_link: quote_link
                                                         }
-
-                                                        // console.log("single user Value", value);
                                                         console.log("USER :: Public Request ==>");
-
-                                                        // parser.pause();
-                                                        // var i = 0;
-                                                        // setTimeout(function () {
                                                         setTimeout(async function timer() {
                                                             var business_name = value.business_name;
                                                             if (value.is_active == true) {
                                                                 console.log("IF");
-                                                                //console.log("Active USer   ", value._id);
-                                                                var click_here = Constant.STAGGING_URL;
                                                                 var mailOptions = {
-                                                                    from: Config.EMAIL_FROM, // sender address
-                                                                    to: value.email, // list of receivers
-                                                                    // to: 'jerriranhard@yahoo.com',
-                                                                    subject: mail_title, // Subject line
-                                                                    text: mail_title, // plaintext body
-                                                                    html: '<!doctype html>' +
-                                                                        '<html lang="en">' +
-                                                                        '<head>' +
-                                                                        '<meta charset="utf-8">' +
-                                                                        '<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">' +
-                                                                        '<link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">' +
-                                                                        '<title>Email </title>' +
-                                                                        '</head>' +
-                                                                        '<body>' +
-                                                                        '<table style="font-family:Roboto;max-width:800px;width:100%;border-radius:4px;margin:0 auto;border-spacing:0;background: #3b4856;display: block;">' +
-                                                                        '<tr>' +
-                                                                        '<td style="border:0;padding: 130px 0 180px 0px;background:#3b4856;border-spacing:0;text-align:center;background: url(' + Constant.STAGGING_URL + 'assets/images/img-001.jpg)no-repeat center 0;background-size:contain">' +
-                                                                        '<table style="width:90%;margin-left:auto;margin-right:auto;border-spacing:0;border-radius:4px;background:#fff;border-radius:10px;border-spacing:0">' +
-                                                                        '<tr>' +
-                                                                        '<td style="padding:20px; text-align:left;">' +
-                                                                        '<table style="width:100%; margin:0; border-spacing:0; border-spacing: 0;">' +
-                                                                        '<tr>' +
-                                                                        '<td style="color:#7C888D; font-size:15px; line-height:normal; padding-bottom:20px;">Dear ' + changeCase.sentenceCase(business_name) + ',</td>' +
-                                                                        '</tr>' +
-                                                                        '<tr>' +
-                                                                        '<td style="color:#7C888D; font-size:15px; line-height:normal; padding-bottom:40px;">One of our users on the Ownly Trade platform has posted a job in your area. </td>' +
-                                                                        '</tr>' +
-                                                                        '<tr>' +
-                                                                        '<td style="color:#2E4255; font-size:18px; font-weight:700; line-height:normal; padding:0; margin:0;">Job details<br><br></td>' +
-                                                                        '</tr>' +
-                                                                        '<tr>' +
-                                                                        '<td>' +
-                                                                        '<p style="display:flex; padding-bottom:25px; margin:0;">' +
-                                                                        '<em style="color:#7C888D; font-size:15px; font-style:italic; line-height:normal; font-weight:300; margin-right:25px;">Title: ' + '<strong>' + request_overview + '</strong>' + '</em>' +
-                                                                        '</p>' +
-                                                                        '<p style="display:flex; padding-bottom:25px; margin:0;">' +
-                                                                        '<em style="color:#7C888D; font-size:15px; font-style:italic; line-height:normal; font-weight:300; margin-right:25px;">Description: ' + '<strong>' + request_detail + '</strong>' + '</em>' +
-                                                                        '</p>' +
-                                                                        '<p style="display:flex; padding-bottom:25px; margin:0;">' +
-                                                                        '<em style="color:#7C888D; font-size:15px; font-style:italic; line-height:normal; font-weight:300; margin-right:25px;">Budget: ' + '<strong>' + budget + '</strong>' + '</em>' +
-                                                                        '</p>' +
-                                                                        '<p style="display:flex; padding-bottom:25px; margin:0;">' +
-                                                                        '<em style="color:#7C888D; font-size:15px; font-style:italic; line-height:normal; font-weight:300; margin-right:25px;">Due Date: ' + '<strong>' + due_date + '</strong>' + '</em>' +
-                                                                        '</p>' +
-                                                                        '</td>' +
-                                                                        '</tr>' +
-                                                                        '<tr>' +
-                                                                        '<td style="color:#2E4255; font-size:18px; font-weight:500; line-height:normal; padding:0; margin:0;">If you would like to quote on this job please <a target="_blank" href="' + quote_link + '">click here</a> to view the job details and submit a quote! </td>' +
-                                                                        '</tr>' +
-                                                                        '<tr>' +
-                                                                        '<td style="color:#2E4255; font-size:18px; font-weight:700; line-height:normal; padding:0; margin:0;"><br><a target="_blank" href="' + quote_link + '" style="display:block;background:#2AA8D7; width:100px; line-height:28px; color:#fff; font-size:13px; border-radius:4px; text-decoration:none; text-align:center; margin-bottom:15px;">Quote Now</a><br /><br /><br /></td>' +
-                                                                        '</tr>' +
-                                                                        '<tr>' +
-                                                                        '<td style="color:#7C888D; font-size:15px; line-height:normal;"><br>Thank you,</td>' +
-                                                                        '</tr>' +
-                                                                        '<tr>' +
-                                                                        '<td style="color:#7C888D; font-size:15px; line-height:normal;">The Ownly Trade team!</td>' +
-                                                                        '</tr>' +
-                                                                        '</table>' +
-                                                                        '</td>' +
-                                                                        '</tr>' +
-                                                                        '</table>' +
-                                                                        '</td>' +
-                                                                        '</tr>' +
-                                                                        '</table>' +
-                                                                        '</body>' +
-                                                                        '</html>'
+                                                                    from: Config.EMAIL_FROM,
+                                                                    to: value.email,
+                                                                    subject: mail_title,
+                                                                    text: mail_title,
+                                                                    html: `<!doctype html>
+                                                                        <html lang="en">
+                                                                        <head>
+                                                                            <meta charset="utf-8">
+                                                                            <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+                                                                            <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+                                                                            <title>Email</title>
+                                                                        </head>
+                                                                        <body>
+                                                                            <table style="font-family:Roboto;max-width:800px;width:100%;border-radius:4px;margin:0 auto;border-spacing:0;background:#3b4856;display:block;">
+                                                                                <tr>
+                                                                                    <td style="border:0;padding:130px 0 180px 0px;background:#3b4856;border-spacing:0;text-align:center;background:url(${Constant.STAGGING_URL}assets/images/img-001.jpg) no-repeat center 0;background-size:contain">
+                                                                                        <table style="width:90%;margin-left:auto;margin-right:auto;border-spacing:0;border-radius:4px;background:#fff;border-radius:10px;border-spacing:0">
+                                                                                            <tr>
+                                                                                                <td style="padding:20px;text-align:left;">
+                                                                                                    <table style="width:100%;margin:0;border-spacing:0;">
+                                                                                                        <tr>
+                                                                                                            <td style="color:#7C888D;font-size:15px;line-height:normal;padding-bottom:20px;">Dear ${changeCase.sentenceCase(business_name)},</td>
+                                                                                                        </tr>
+                                                                                                        <tr>
+                                                                                                            <td style="color:#7C888D;font-size:15px;line-height:normal;padding-bottom:40px;">One of our users on the Ownly Trade platform has posted a job in your area.</td>
+                                                                                                        </tr>
+                                                                                                        <tr>
+                                                                                                            <td style="color:#2E4255;font-size:18px;font-weight:700;line-height:normal;padding:0;margin:0;">Job details<br><br></td>
+                                                                                                        </tr>
+                                                                                                        <tr>
+                                                                                                            <td>
+                                                                                                                <p style="display:flex;padding-bottom:25px;margin:0;">
+                                                                                                                    <em style="color:#7C888D;font-size:15px;font-style:italic;line-height:normal;font-weight:300;margin-right:25px;">Title: <strong>${request_overview}</strong></em>
+                                                                                                                </p>
+                                                                                                                <p style="display:flex;padding-bottom:25px;margin:0;">
+                                                                                                                    <em style="color:#7C888D;font-size:15px;font-style:italic;line-height:normal;font-weight:300;margin-right:25px;">Description: <strong>${request_detail}</strong></em>
+                                                                                                                </p>
+                                                                                                                <p style="display:flex;padding-bottom:25px;margin:0;">
+                                                                                                                    <em style="color:#7C888D;font-size:15px;font-style:italic;line-height:normal;font-weight:300;margin-right:25px;">Budget: <strong>${budget}</strong></em>
+                                                                                                                </p>
+                                                                                                                <p style="display:flex;padding-bottom:25px;margin:0;">
+                                                                                                                    <em style="color:#7C888D;font-size:15px;font-style:italic;line-height:normal;font-weight:300;margin-right:25px;">Due Date: <strong>${due_date}</strong></em>
+                                                                                                                </p>
+                                                                                                            </td>
+                                                                                                        </tr>
+                                                                                                        <tr>
+                                                                                                            <td style="color:#2E4255;font-size:18px;font-weight:500;line-height:normal;padding:0;margin:0;">If you would like to quote on this job please <a target="_blank" href="${quote_link}">click here</a> to view the job details and submit a quote!</td>
+                                                                                                        </tr>
+                                                                                                        <tr>
+                                                                                                            <td style="color:#2E4255;font-size:18px;font-weight:700;line-height:normal;padding:0;margin:0;"><br>
+                                                                                                                <a target="_blank" href="${quote_link}" style="display:block;background:#2AA8D7;width:100px;line-height:28px;color:#fff;font-size:13px;border-radius:4px;text-decoration:none;text-align:center;margin-bottom:15px;">Quote Now</a><br><br><br>
+                                                                                                            </td>
+                                                                                                        </tr>
+                                                                                                        <tr>
+                                                                                                            <td style="color:#7C888D;font-size:15px;line-height:normal;"><br>Thank you,</td>
+                                                                                                        </tr>
+                                                                                                        <tr>
+                                                                                                            <td style="color:#7C888D;font-size:15px;line-height:normal;">The Ownly Trade team!</td>
+                                                                                                        </tr>
+                                                                                                    </table>
+                                                                                                </td>
+                                                                                            </tr>
+                                                                                        </table>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </table>
+                                                                        </body>
+                                                                        </html>`
                                                                 };
-                                                                console.log("before send mail If condition");
-
-
-                                                                let info = transporter.sendMail({
+                                                                transporter.sendMail({
                                                                     from: mailOptions.from,
                                                                     to: mailOptions.to,
                                                                     subject: mailOptions.subject,
@@ -4049,96 +5024,85 @@ function addMR(req, res) {
                                                                 }, function (error, response) {
                                                                     console.log("===============================");
                                                                     if (error) {
-                                                                        console.log("eeeeee", error);
+                                                                        console.log("Public trader email error: ", error);
                                                                     } else {
-
-                                                                        console.log("Message sent: Successfully  4 ", mailOptions.to);
+                                                                        console.log("Message sent: Successfully 4 ", mailOptions.to);
                                                                         sms.JobRequestMsg(msgOptions);
                                                                     }
                                                                 });
-
-                                                                console.log("after send mail If condition");
-
-                                                                // parser.resume();
-                                                                // console.log("mail section 1", mailOptions);
                                                             } else {
                                                                 console.log("Else :: !isActive ==>");
-
-                                                                //console.log("InActive USer   ", value._id);
                                                                 var activation_code = Math.random().toString(36).substring(2, 10) + Math.random().toString(36).substring(2, 10);
                                                                 var click_here = Constant.PUBLIC_STAGGING_URL + 'trader_account_activation/' + activation_code + "/" + maintenance_id;
                                                                 var updateUserRecord = {
                                                                     activation_code: activation_code
                                                                 }
-                                                                User.update({ _id: value._id }, { $set: updateUserRecord }, function (err) {
-                                                                });
-
+                                                                User.update({ _id: value._id }, { $set: updateUserRecord }, function (err) {});
                                                                 var mailOptions = {
-                                                                    from: Config.EMAIL_FROM, // sender address
-                                                                    to: value.email, // list of receivers
-                                                                    // to: 'jerriranhard@yahoo.com',
-                                                                    subject: value.firstname + ' ' + value.lastname + '- NEW QUOTE REQUEST', // Subject line
-                                                                    text: value.firstname + ' ' + value.lastname + '- NEW QUOTE REQUEST', // plaintext body
-                                                                    html: '<!doctype html>' +
-                                                                        '<html lang="en">' +
-                                                                        '<head>' +
-                                                                        '<meta charset="utf-8">' +
-                                                                        '<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">' +
-                                                                        '<link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">' +
-                                                                        '<title>Email </title>' +
-                                                                        '</head>' +
-                                                                        '<body>' +
-                                                                        '<table style="font-family:Roboto;max-width:800px;width:100%;border-radius:4px;margin:0 auto;border-spacing:0;background: #3b4856;display: block;">' +
-                                                                        '<tr>' +
-                                                                        '<td style="border:0;padding: 130px 0 180px 0px;background:#3b4856;border-spacing:0;text-align:center;background: url(' + Constant.STAGGING_URL + 'assets/images/img-001.jpg) no-repeat center 0;background-size:contain">' +
-                                                                        '<table style="width:90%;margin-left:auto;margin-right:auto;border-spacing:0;border-radius:4px;background:#fff;border-radius:10px;border-spacing:0">' +
-                                                                        '<tr>' +
-                                                                        '<td style="padding:20px; text-align:left;">' +
-                                                                        '<table style="width:100%; margin:0; border-spacing:0; border-spacing: 0;">' +
-                                                                        '<tr>' +
-                                                                        '<td style="color:#7C888D; font-size:15px; line-height:normal; padding-bottom:20px;">Good news travels fast! Ownly wants to connect as someone is interested in using your services.</td>' +
-                                                                        '</tr>' +
-                                                                        '<tr>' +
-                                                                        '<td style="color:#7C888D; font-size:15px; line-height:normal; padding-bottom:40px;">As you know, unlike other search platforms, we give all <b>TRADES A FAIR GO.</b> We help you <b>PROMOTE, SECURE</b> AND <b>GROW</b> YOUR BUSINESS.</td>' +
-                                                                        '</tr>' +
-                                                                        '<tr>' +
-                                                                        '<td style="padding:25px;" >' +
-                                                                        ' <table style="width:100%; margin:0 auto; border:0; border-spacing:0; text-align:left;">' +
-                                                                        ' <tr><td style="padding:0 0 30px;font-size:16px; color:#606382; font-weight:normal;"><strong>What’s even better?</strong></td></tr>' +
-                                                                        ' <tr><td style="font-size:16px; color:#606382; font-weight:normal; padding:0 0 20px 40px;"><div style="width:8px; height:8px; background:#606382; display:inline-block; border-radius:100px; margin:0 10px 0 0;"></div>Our trade innovation platform is completely free to use! </td></tr>' +
-                                                                        ' <tr><td style="font-size:16px; color:#606382; font-weight:normal; padding:0 0 20px 40px;"><div style="width:8px; height:8px; background:#606382; display:inline-block; border-radius:100px; margin:0 10px 0 0;"></div>Connecting you to thousands of new business opportunities</td></tr>' +
-                                                                        ' <tr><td style="font-size:16px; color:#606382; font-weight:normal; padding:0 0 20px 40px;"><div style="width:8px; height:8px; background:#606382; display:inline-block; border-radius:100px; margin:0 10px 0 0;"></div>UNLIMITED quotes</td></tr>' +
-                                                                        ' <tr><td style="font-size:16px; color:#606382; font-weight:normal; padding:0 0 20px 40px;"><div style="width:8px; height:8px; background:#606382; display:inline-block; border-radius:100px; margin:0 10px 0 0;"></div>No booking fees or taking a share of your hard-earned revenue</td></tr>' +
-                                                                        ' <tr><td style="font-size:16px; color:#606382; font-weight:normal; padding:0 0 20px 40px;"><div style="width:8px; height:8px; background:#606382; display:inline-block; border-radius:100px; margin:0 10px 0 0;"></div>Giving your business exposure by saving your work to a property file so the next owner/tenant/property manager can recall you with a click of a button</td></tr>' +
-                                                                        ' <tr><td style="font-size:16px; color:#606382; font-weight:normal; padding:0 0 20px 40px;"><div style="width:8px; height:8px; background:#606382; display:inline-block; border-radius:100px; margin:0 10px 0 0;"></div>Connecting you to new markets–strata managers, property managers which no other trade platform has done before!</td></tr>' +
-                                                                        '</table >' +
-                                                                        '</td>' +
-                                                                        '</tr>' +
-                                                                        '<tr>' +
-                                                                        '<td style="color:#2E4255; font-size:15px; font-weight:500; line-height:normal; padding:0 0 20px; margin:0;">You are one step away from responding to your quote request and securing your next potential job:<br></td>' +
-                                                                        '</tr>' +
-                                                                        '<tr>' +
-                                                                        '<td style="color:#2E4255; font-size:15px; font-weight:700; line-height:normal; padding:0 0 20px; margin:0;"><a target="_blank" href="' + click_here + '" style="display:block;background:#2AA8D7; width:100px; line-height:28px; color:#fff; font-size:13px; border-radius:4px; text-decoration:none;text-align:center; margin-bottom:15px;">Quote Now</a><br /><br /><br /></td>' +
-                                                                        '</tr>' +
-                                                                        '<tr>' +
-                                                                        '<td style="color:#7C888D; font-size:15px; line-height:normal;">Thank you,</td>' +
-                                                                        '</tr>' +
-                                                                        '<tr>' +
-                                                                        '<td style="color:#7C888D; font-size:15px; line-height:normal;">The Ownly Trade team!</td>' +
-                                                                        '</tr>' +
-                                                                        '</table>' +
-                                                                        '</td>' +
-                                                                        '</tr>' +
-                                                                        '</table>' +
-                                                                        '</td>' +
-                                                                        '</tr>' +
-                                                                        '</table>' +
-                                                                        '</body>' +
-                                                                        '</html>'
+                                                                    from: Config.EMAIL_FROM,
+                                                                    to: value.email,
+                                                                    subject: value.firstname + ' ' + value.lastname + '- NEW QUOTE REQUEST',
+                                                                    text: value.firstname + ' ' + value.lastname + '- NEW QUOTE REQUEST',
+                                                                    html: `<!doctype html>
+                                                                        <html lang="en">
+                                                                        <head>
+                                                                            <meta charset="utf-8">
+                                                                            <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+                                                                            <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+                                                                            <title>Email</title>
+                                                                        </head>
+                                                                        <body>
+                                                                            <table style="font-family:Roboto;max-width:800px;width:100%;border-radius:4px;margin:0 auto;border-spacing:0;background:#3b4856;">
+                                                                                <tr>
+                                                                                    <td style="border:0;padding:130px 0 180px 0px;background:#3b4856;border-spacing:0;text-align:center;background:url(${Constant.STAGGING_URL}assets/images/img-001.jpg) no-repeat center 0;background-size:contain">
+                                                                                        <table style="width:90%;margin-left:auto;margin-right:auto;border-spacing:0;border-radius:4px;background:#fff;border-radius:10px;border-spacing:0">
+                                                                                            <tr>
+                                                                                                <td style="padding:20px;text-align:left;">
+                                                                                                    <table style="width:100%;margin:0;border-spacing:0;">
+                                                                                                        <tr>
+                                                                                                            <td style="color:#7C888D;font-size:15px;line-height:normal;padding-bottom:20px;">Good news travels fast! Ownly wants to connect as someone is interested in using your services.</td>
+                                                                                                        </tr>
+                                                                                                        <tr>
+                                                                                                            <td style="color:#7C888D;font-size:15px;line-height:normal;padding-bottom:40px;">As you know, unlike other search platforms, we give all <b>TRADES A FAIR GO.</b> We help you <b>PROMOTE, SECURE</b> AND <b>GROW</b> YOUR BUSINESS.</td>
+                                                                                                        </tr>
+                                                                                                        <tr>
+                                                                                                            <td style="padding:25px;">
+                                                                                                                <table style="width:100%;margin:0 auto;border:0;border-spacing:0;text-align:left;">
+                                                                                                                    <tr><td style="padding:0 0 30px;font-size:16px;color:#606382;font-weight:normal;"><strong>What’s even better?</strong></td></tr>
+                                                                                                                    <tr><td style="font-size:16px;color:#606382;font-weight:normal;padding:0 0 20px 40px;"><div style="width:8px;height:8px;background:#606382;display:inline-block;border-radius:100px;margin:0 10px 0 0;"></div>Our trade innovation platform is completely free to use!</td></tr>
+                                                                                                                    <tr><td style="font-size:16px;color:#606382;font-weight:normal;padding:0 0 20px 40px;"><div style="width:8px;height:8px;background:#606382;display:inline-block;border-radius:100px;margin:0 10px 0 0;"></div>Connecting you to thousands of new business opportunities</td></tr>
+                                                                                                                    <tr><td style="font-size:16px;color:#606382;font-weight:normal;padding:0 0 20px 40px;"><div style="width:8px;height:8px;background:#606382;display:inline-block;border-radius:100px;margin:0 10px 0 0;"></div>UNLIMITED quotes</td></tr>
+                                                                                                                    <tr><td style="font-size:16px;color:#606382;font-weight:normal;padding:0 0 20px 40px;"><div style="width:8px;height:8px;background:#606382;display:inline-block;border-radius:100px;margin:0 10px 0 0;"></div>No booking fees or taking a share of your hard-earned revenue</td></tr>
+                                                                                                                    <tr><td style="font-size:16px;color:#606382;font-weight:normal;padding:0 0 20px 40px;"><div style="width:8px;height:8px;background:#606382;display:inline-block;border-radius:100px;margin:0 10px 0 0;"></div>Giving your business exposure by saving your work to a property file so the next owner/tenant/property manager can recall you with a click of a button</td></tr>
+                                                                                                                    <tr><td style="font-size:16px;color:#606382;font-weight:normal;padding:0 0 20px 40px;"><div style="width:8px;height:8px;background:#606382;display:inline-block;border-radius:100px;margin:0 10px 0 0;"></div>Connecting you to new markets–strata managers, property managers which no other trade platform has done before!</td></tr>
+                                                                                                                </table>
+                                                                                                            </td>
+                                                                                                        </tr>
+                                                                                                        <tr>
+                                                                                                            <td style="color:#2E4255;font-size:15px;font-weight:500;line-height:normal;padding:0 0 20px;margin:0;">You are one step away from responding to your quote request and securing your next potential job:<br></td>
+                                                                                                        </tr>
+                                                                                                        <tr>
+                                                                                                            <td style="color:#2E4255;font-size:15px;font-weight:700;line-height:normal;padding:0 0 20px;margin:0;">
+                                                                                                                <a target="_blank" href="${click_here}" style="display:block;background:#2AA8D7;width:100px;line-height:28px;color:#fff;font-size:13px;border-radius:4px;text-decoration:none;text-align:center;margin-bottom:15px;">Quote Now</a><br><br><br>
+                                                                                                            </td>
+                                                                                                        </tr>
+                                                                                                        <tr>
+                                                                                                            <td style="color:#7C888D;font-size:15px;line-height:normal;">Thank you,</td>
+                                                                                                        </tr>
+                                                                                                        <tr>
+                                                                                                            <td style="color:#7C888D;font-size:15px;line-height:normal;">The Ownly Trade team!</td>
+                                                                                                        </tr>
+                                                                                                    </table>
+                                                                                                </td>
+                                                                                            </tr>
+                                                                                        </table>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </table>
+                                                                        </body>
+                                                                        </html>`
                                                                 };
-                                                                console.log("before send mail else condition");
-
-                                                                let info = transporter.sendMail({
+                                                                transporter.sendMail({
                                                                     from: mailOptions.from,
                                                                     to: mailOptions.to,
                                                                     subject: mailOptions.subject,
@@ -4147,30 +5111,12 @@ function addMR(req, res) {
                                                                 }, function (error, response) {
                                                                     console.log("===============================");
                                                                     if (error) {
-                                                                        console.log("eeeeee", error);
+                                                                        console.log("Inactive public trader email error: ", error);
                                                                     } else {
-                                                                        console.log("Message sent: Successfully 5  ", mailOptions.to);
+                                                                        console.log("Message sent: Successfully 5 ", mailOptions.to);
                                                                         sms.JobRequestMsg(msgOptions);
                                                                     }
                                                                 });
-
-                                                                // sendmail({
-                                                                //     from: mailOptions.from,
-                                                                //     to: mailOptions.to,
-                                                                //     subject: mailOptions.subject,
-                                                                //     html: mailOptions.html,
-                                                                // }, function (error, response) {
-                                                                //     if (error) {
-                                                                //         console.log(error);
-                                                                //         console.log("Message failed => ", mailOptions.to);
-                                                                //     } else {
-                                                                //         console.log("Message sent: Successfully ", mailOptions.to);
-                                                                //     }
-                                                                // });
-                                                                console.log("after send mail Else condition");
-
-                                                                // console.log("mail section 2", mailOptions);
-                                                                // parser.resume();
                                                             }
                                                             key++;
                                                         }, key * 2000);
@@ -4189,7 +5135,6 @@ function addMR(req, res) {
             } else {
                 res.json({ code: Constant.ERROR_CODE, message: Constant.INTERNAL_ERROR });
             }
-
         } else {
             res.json({ code: Constant.ERROR_CODE, message: Constant.REQ_DATA_MISSING });
         }
