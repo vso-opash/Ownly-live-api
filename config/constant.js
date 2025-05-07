@@ -1,0 +1,258 @@
+'use strict';
+
+module.exports = {
+    SUCCESS_CODE: 200,
+    REQ_DATA_ERROR_CODE: 202,
+    ERROR_CODE: 400,
+    INVALID_CODE: 401,
+    ALLREADY_EXIST: 201,
+    INACTIVATE: 406,
+    NOT_FOUND: 404,
+    INTERNAL_ERROR: 'Request could not be processed. Please try again.',
+    // LOCAL_URL_ADMIN: 'http://localhost:5094/admin/#!/',
+    // STAGGING_URL: 'http://localhost:5094/#!/',
+    // old 1 
+    // STAGGING_URL: 'http://52.64.215.66:5094/#!/',
+    // LOCAL_URL_ADMIN: 'http://52.64.215.66:5094/admin/#!/',
+    // old 2 
+    // STAGGING_URL: 'http://13.210.134.130:5094/#!/',
+    // LOCAL_URL_ADMIN: 'http://13.210.134.130:5094/admin/#!/',
+    // old 3
+    // STAGGING_URL: 'http://3.104.181.36:5094/', 
+    // LOCAL_URL_ADMIN: 'http://3.104.181.36:5094/admin/',
+    // new one
+    // STAGGING_URL: 'http://13.54.34.150:5094/',
+    // LOCAL_URL_ADMIN: 'http://13.54.34.150:5094/admin/',
+
+
+    // Syncitt
+    // STAGGING_URL: 'http://portal.syncitt.world/',
+    // STAGGING_URL_WITH_PORT: 'http://portal.syncitt.world:5094/',
+    // LOCAL_URL_ADMIN: 'http://portal.syncitt.world/admin/',
+    // PUBLIC_STAGGING_URL: 'http://syncitt.world/',
+    // API_URL: 'http://13.54.34.150:5095/',
+
+
+    // Ownly
+    // STAGGING_URL: 'https://portal.ownly.com.au/',
+    // STAGGING_URL_WITH_PORT: 'https://portal.ownly.com.au:5094/',
+    // LOCAL_URL_ADMIN: 'https://portal.ownly.com.au/admin/',
+    // PUBLIC_STAGGING_URL: 'https://ownly.com.au/',
+    // API_URL: 'https://portal.ownly.com.au:5095/',
+
+    // API_URL: 'http://localhost:5095/',
+    // STAGGING_URL: 'http://localhost:5094/',
+    // PUBLIC_STAGGING_URL: 'http://localhost:4200/',
+
+
+    STAGGING_URL: global.gConfig.STAGGING_URL,
+    STAGGING_URL_WITH_PORT: global.gConfig.STAGGING_URL_WITH_PORT,
+    LOCAL_URL_ADMIN: global.gConfig.LOCAL_URL_ADMIN,
+    PUBLIC_STAGGING_URL: global.gConfig.PUBLIC_STAGGING_URL,
+    API_URL: global.gConfig.API_URL,
+
+    TEN_KM_INTO_MILE: 6.21371,
+    FIFTY_KM_INTO_MILE: 31.0686,
+    HUNDRED_KM_INTO_MILE: 62.1371,
+    RADIUS: 3963.2,
+
+    //role id
+    ADMIN: "5a54c6ded0f3e9e0f8562f90",
+    TENANT: "5a1d11c016bed22901ce050c",
+    TRADER: "5a1d26b26ef60c3d44e9b377",
+
+    PSMA_URL: "https://api.psma.com.au/beta/v1/addresses",
+    PSMA_KEY: "Z6Auyhh7JOaXfvandiUb0e95Mr92GfnY",
+
+    GOOGLE_API_URL: "maps.googleapis.com/maps/api/geocode/json",
+
+    //Auth Ctrl
+    AUTH_ERROR: 'Authentication failed.',
+    REQ_DATA_MISSING: 'Request data is not proper',
+    EMAIL_ALREADY_EXIST: 'Email already exist.',
+    PROPERTY_OWNER_ALREADY_EXIST: 'Property owner already exist.',
+    PROPERTY_OWNER_CREATE_UNSUCCESS: "Property owner could not be created right now",
+    ACCOUNT_REGISTERED: 'Congratulations, Please check your email to activate account.',
+    // ACCOUNT_REGISTERED: 'Congratulations, your account has been registered successfully.',
+    INVALID_EMAIL: 'Email is not valid.',
+    REQUIRED_REGISTER_FIELDS: 'First name, Last name, Email id and password is required.',
+    LOGIN_REQUIRED_FIELDS: 'Email and password is required.',
+    INVALID_LOGIN_DETAILS: 'Email/password is not correct.',
+    ACCOUNT_ACTIVATED: 'Your account has been activated successfully.',
+    SIGNIN_REQUIRED_FIELDS: 'Username and password is required.',
+    INVALID_SIGNIN_DETAILS: 'Username/password is not correct.',
+    SIGNIN_SUCCESS: 'User logged in successfully.',
+    ACCOUNT_DELETED: 'Your account has been deleted.',
+    ACCOUNT_INACTIVE: 'Your account is not activated yet.',
+    SIGNUP_REQUIRED_FIELDS: 'Username and password is required.',
+    USERNAME_ALREADY_EXIST: 'Username already exist.',
+    //USER_NO_LONGER_EXIST: 'User no longer exist.',
+    SENT_VERIFICATION_EMAIL: 'Verification email has been sent to your email.',
+    FAILED_VERIFICATION_EMAIL: 'Verification email sending failed so please try again.',
+    EMAIL_NOT_VERIFIED: "Your email is not verified yet.",
+    EMAIL_INCORRECT: 'No account with that email address exists.',
+    ACCOUNT_ALREADY_ACTIVATED: 'Your account is already activated.',
+    SENT_FORGOT_EMAIL_FAILED: 'Forgot email sending failed. Please try again.',
+    SENT_FORGOT_EMAIL: 'An email has been sent to you with further instruction. So please check your email and reset password.',
+    PASSWORD_RESET_TOKEN_EXPIRED: 'Password reset token is invalid or has expired.',
+    PASSWORD_RESET_TOKEN_VALID: 'Password reset token is valid.',
+    PASSWORD_RESET: 'Password has been reset successfully.',
+    ALREADY_ADD_TENANT: 'You have already sent invitation to this tenant for the same property',
+
+    //Users Ctrl
+    UPDATE_USER_PROFILE_SUCCESS: 'Profile info updated successfully.',
+    UPDATE_PROFILE_PIC_SUCCESS: 'User profile pic updated successfully.',
+    REQUIRED_PROFILE_INFO: 'First name, Last name and User Id is required.',
+    UPDATE_USER_LOCATION_SUCCESS: 'User location details updated successfully.',
+    USER_ID_REQUIRED: 'User Identification Id is required.',
+    USER_RECORD_FETCHED: 'User info fetched successfully.',
+    PASSWORD_CHANGED_SUCCESS: 'Password has been changed successfully.',
+    WRONG_CURRENT_PASSWORD: 'Please provide correct current password.',
+    REQUIRED_PASSWORD_VALUE: 'Current and New password are required.',
+    USERS_LIST_FETCHED: 'Users list fetched successfully.',
+    USER_IMAGE_FETCHED: 'User image fetched successfully.',
+    USER_NO_LONGER_EXIST: 'User no longer exist.',
+    USER_RECORD_DELETED: 'User record deleted successfully',
+    USER_ACCOUNT_ACTIVATION: "Successful in activating your account",
+    USER_ACCOUNT_ACTIVATION_ERROR: "Unsuccessful in activating your account",
+    USER_ACCOUNT_ACTIVATED: "Already your account is activated",
+    INVALID_ACTIVATION_LINK: "Invalid user activation link ",
+    ERROR_IN_SAVING_LAST_LOGGED_IN_USER: "Error occured while saving logged in user log ",
+    SUCCESS_IN_SAVING_LAST_LOGGED_IN_USER: "Successfully saved logged in user log",
+    USER_NOT_EXIST: 'The email you entered is not registered with us',
+    SUCCESS_CAT_DATA: 'Successfully get category data',
+
+    REST_LINK_EXPIRE: 'Reset password token expires! Regenerate token to set password',
+    REST_LINK_EXIST: 'Reset password token exists',
+
+    ERROR_IN_GETTING_LAST_LOGGED_IN_USER: "Error occured while getting logged in user log ",
+    SUCCESS_IN_GETTING_LAST_LOGGED_IN_USER: "Successfully get logged in user log",
+    //Quote form
+    QUOTE_FORM_SUBMITION_SUCCESS: 'Thankyou for chosing us, we will contact you withing 24 hours',
+    QUOTE_LIST_FETCHED: 'Quote list fetched successfully.',
+
+    UPLOAD_UNSUCCESSFULL: 'File format you have entered is not supported (jpg,png,gif)',
+    //Pushnotification Ctrl
+    DEVICE_TOKEN_NOT_FOUND: 'Device token not found.',
+    //Module
+    MODULE_CREATED: 'Module created successfully',
+    MODULE_RECORD_FETCHED: 'Module record fetched successfully',
+    //Role
+    ROLE_CREATED: 'Role created successfully',
+    ROLE_RECORD_FETCHED: 'Role record fetched successfully',
+    //Role permission 
+    ROLE_PERMISSION_CREATED: 'Role permission created successfully',
+    ROLE_PERMISSION_FETCHED: 'Role permission fetched successfully',
+    //User Log
+    USER_LOG_CREATED: 'User log created successfully',
+    USER_LOG_FETCHED: 'User log fetched successfully',
+    USER_LOG_OUT: 'User logout successfully',
+    AUTHENTICATION_FAILED: "Authentication failed!",
+    UPLOAD_SUCCESSFULL: "Image uploaded successfully.",
+    //User login logs
+    REQUIRED_DATA_MISSING: "Please provide proper values.",
+    USER_LAST_LOGIN_LOGS_SUCCESS: "User last login successfully saved",
+
+    //appointment 
+    APPOINTMENT_SAVE_FAILED: "Error occured while saving appointment !",
+    APPOINTMENT_SAVE_SUCCESS: "Successfully saved appointment",
+    APPOINTMENT_AlREADY_EXIST: "Appointment exist with this date & time",
+    //Property
+
+    MAIN_BROWSE_SEARCH_DATA: "Successfully got the searched data",
+    MAIN_BROWSE_SEARCH_DATA_ERROR: "No records for the searched data",
+    ERROR_RETRIVING_DATA: "Error occured while retreiving the data from collection",
+    PROPERTY_SUCCESS_DATA: "Property created successfully and will be searchable after admin approval",
+    PROPERTY_ERORR_DATA: "No property data found",
+    PROPERTY_SUCCESS_SALE_DATA: "Successfully got the property data based on type sale",
+    PROPERTY_SUCCESS_GOT_DATA: "Successfully got the property data",
+    PROPERTY_SUCCESS_RENTAL_DATA: "Successfully got the property data based on type rental",
+    PROPERTY_CREATE_SUCCESS: "Property created successfully",
+    PROPERTY_OWNER_CREATE_SUCCESS: "Property owner created successfully",
+    PROPERTY_OWNER_FETCH_SUCCESS: "Property owner fetched successfully",
+    PROPERTY_CREATE_UNSUCCESS: "Some internal error occured",
+    PROPERTY_DELETE_UNSUCCESS: "property delete unsuccessfully",
+    CSV_UPLOAD_SUCCESS: "Csv uploaded successfully",
+    CSV_UPLOAD_UNSUCCESS: "Csv not uploaded successfully you may have empty fields on row #",
+    NOT_VALID_CSV: "Not a valid csv file",
+    SAVE_AS_DRAFT_UNSUCCESS: "Some internal error occured",
+    SAVE_AS_DRAFTE_SUCCESS: "property saved as draft successfull",
+    PROPERTY_DELETE_SUCCESS: "sccessfully property deleted",
+    PROPERTY_RETRIEVE_SUCCESS: "Property retrieved successfully",
+    AGENTCY_RETRIEVE_SUCCESS: "Agency retrieved successfully",
+    PROPERTY_SUCCESS_LATEST_DATA: "Successfully got latest product",
+    TWILLIO_ACCOUNT_ID: 'ACbc845974516c288934600a9073e0ca16',
+    TWILLIO_AUTH_TOKEN: '0bb8699484c388876590bd6dd16d45e7',
+    SMS_FROM_NUMBER: '(201) 905-2180',
+    // FACEBOOK_CLIENT_SECRET: '8ecb821fe948a1eba126228b860929f1',
+    FACEBOOK_CLIENT_SECRET: '32040e6e31855c19d9db67ff8da6d0e6',
+    // GOOGLE_API_KEY: 'AIzaSyD7PD7klmQbC57ksiGc0PyyViuqCf52_HI',
+    GOOGLE_API_KEY: 'AIzaSyCGWZqTcVNj2IeuAud3EsdL3ewktb0yCFo',
+    UPDATE_SUCCESSFULL: 'Property updated successfully',
+    UPDATE_UNSUCCESSFULL: 'Property updated unsuccessfull',
+    PROPERTY_APPLICATION_CREATE_SUCCESS: 'Application created successfully',
+    PROPERTY_APPLICATION_RETRIEVE_SUCCESS: "Application retrieved successfully",
+
+    USER_PROPERTY_RELATION_SUCCESS: 'User is associated with this property',
+    USER_PROPERTY_RELATION_UNSUCCESS: 'User is not associated with this property',
+    USER_PROPERTY_RELATION_STATUS: 'Successfully got the user relation with property',
+
+    //Notification
+    NOTIFICATION_FOUND_SUCCESSFULLY: 'Successfully got notification settings',
+    NOTIFICATION_UPDATE_SUCCESSFULLY: 'Notification updated succesfully',
+
+    //Amenities
+    AMENITIES_CREATE_SUCCESSFULLY: 'Successfully created amenities',
+    NOT_PROPER_DATA: 'Please provide proper data',
+    AMENITIES_FETCHED_SUCCESSFULLY: 'Successfully fetched amenities list',
+    USER_DELETE_SUCCESS: 'Successfully deleted user',
+    USER_DELETE_SUBSCRIPTION: 'Subscription cancelled successfully',
+    //Documents 
+    ERROR_DOCUMENT_UPLOAD: "Error occured while document upload please try again latter",
+    DOCUMENT_TAGGED_SUCCESS: "Files tagged successfully",
+    DOCUMENT_SUCCESS: "Document uploaded successfully",
+    DOCUMENT_FETCH_SUCCESS: "Document retrieved successfully.",
+    DOC_ADDED_TO_FAV_SUCCESS: "Document successfully added to favorite list",
+    DOC_ADDED_TO_FAV_UNSUCCESS: "Document not added to favorite list, Please try again latter",
+    DOC_DELETE_SUCCESS: "Document deleted successfully",
+    DOC_DELETE_UNSUCCESS: "Document not deleted successfully, Please try again latter",
+    DOC_ALREADY_DELETED: "Document already deleted",
+    AGENT: "5a12b4fe6b53784648d45479",
+    OWN_AGENCY: "5a1d113016bed22901ce050b",
+    TENANT: "5a1d11c016bed22901ce050c",
+    OWNER: "5a1d295034240d4077dff208",
+    RUN_STRATA_MANAGEMENT_COMPANY: "5a1d27076ef60c3d44e9b378",
+    WORK_FOR_STRATA_MANAGEMENT_COMPANY: "5a1d2be334240d4077dff209",
+    TRADER: "5a1d26b26ef60c3d44e9b377",
+    PROPERTY_OWNER: "5a1d295034240d4077dff208",
+    GROUP_FETCHED_SUCCESS: 'Successfully fetched group',
+    GROUP_FETCHED_ERROR: 'Unsuccessful in fetching group',
+    GROUP_SAVE_SUCCESS: 'Successfully saved  data in group collection',
+    IMAGE_UPLOAD_SUCCESS: 'Image uploaded successfully ',
+    IMAGE_UPLOAD_UNSUCCESS: 'Image upload unsuccessfull! please try again latter',
+    SUCCESS_CONTACT_MESSAGE: 'You have successfully send message',
+    WATCHER_REMOVED_SUCCESS: "Watcher removed succesfully",
+    NOTIFICATION_TYPE_INVITATION_REQ: 1,
+    NOTIFICATION_TYPE_SEND_CONFIREMATION: 2,
+    NOTIFICATION_TYPE_CONTACT_MESSAGE: 3,
+    NOTIFICATION_TYPE_MAINTENENCE_REQ: 4,
+    NOTIFICATION_TYPE_MAINTENENCE_JOB_CLOSED: 5,
+    NOTIFICATION_TYPE_MAINTENENCE_JOB_STATUS_CHANGED: 6,
+    NOTIFICATION_TYPE_AGREEMENT: 7,
+    NOTIFICATION_TYPE_NOTICE_BOARD: 8,
+    NOTIFICATION_TYPE_DISPUTE: 9,
+    NOTIFICATION_TYPE_DOCUMENT: 10,
+    NOTIFICATION_TYPE_APPLICATION: 11,
+    REQ_STATUS_COMPLETE_JOB: 5,
+    REQ_STATUS_ACCEPT_JOB: 2,
+    NOTIFICATION_TYPE_PROPOSAL: 6,
+    NOTIFICATION_TYPE_MAINTENENCE_PROPOSAL_REQ: 7,
+    APP_DOWNLOAD_URL: 'www.google.com',
+
+    // contact us
+    REQUIRED_CONTACT_US_FIELDS: 'First name, Last name, Email id, Mobile number and Role is required.',
+    CONTACT_US_ERROR: 'Something went wrong.',
+
+    // Admin Id
+    ADMIN_ID: '5a54c6ded0f3e9e0f8562f90'
+};

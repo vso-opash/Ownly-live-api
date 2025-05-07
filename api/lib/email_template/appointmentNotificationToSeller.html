@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Property Market Place</title>
+    <style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+    
+    body,
+    table,
+    td,
+    p,
+    a,
+    li,
+    blockquote {
+        -webkit-text-size-adjust: none !important;
+    }
+    
+    @media only screen and (max-width: 480px) {
+        body {
+            width: 100% !important;
+            min-width: 100% !important;
+            margin: 0;
+        }
+        #parent_tbl {
+            width: 100% !important;
+            padding: 0 0;
+        }
+        #child_tbl {
+            width: 100% !important;
+            padding: 0 0px;
+        }
+        .top_head {
+            display: block !important;
+            width: 100%;
+            text-align: center;
+            padding: 18px 0px 24px 0px !important;
+        }
+        .top_head h3 {
+            font-size: 16px !important;
+        }
+        .info {
+            display: block;
+            width: 100%;
+            text-align: left;
+        }
+        .footer-padding {padding:10px 3px !important;}
+    }
+    </style>
+</head>
+
+<body ng-app="app" ng-controller="FrontCtrl">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background: #d8d8d8; margin: 0; padding: 0">
+        <tr>
+            <td>
+                <table align="center" border="0" cellpadding="0" cellspacing="0" width="600px" id="parent_tbl" style="background: #fff; margin: 40px auto">
+                    <tr>
+                        <td>
+                            <table width="600px" align="center" cellpadding="0" cellspacing="0" id="child_tbl">
+                                  <tr>
+                                    <td colspan="2" class="top_head" style=" padding:18px 8px 24px 30px; text-align: center;">
+                                        <!-- <img src="http://localhost:5040/assets/images/logo.png"> -->
+                                    </td>
+                                </tr>
+                                <tr colspan="2">
+                                  <td style=" padding:30px 30px 0px 30px;"><p style="margin:0px; font-size:23px; color:#666666; font-family: arial; font-weight:300;">App</p></td>
+                                </tr>
+                                <tr>
+                                    <td style=" padding:30px 30px 12px 30px;" colspan="2">
+                                        <p style=" margin:0 0 15px 0; font-size:18px; color:#666666; font-family: arial; font-weight:300;">
+                                            Hi, {firstname} {lastname}!</p>
+                                        <h3 style=" font-size:14px; color:#666666; font-family: arial; font-weight:300; margin: 0 0 20px 0">You recently submitted a forgot password request for your Wine account, here is a link click on it to reset your password.</h3>
+                                        <p style=" margin:0 0 12px 0; font-size:14px; color:#666666; font-family: arial; font-weight:300;"></p>
+                                        <br/>
+                                        <p> or copy this link ( http://localhost:5040/#/resetPassword/{id}/{token} ) and open in browser to reset password</p>
+                                        <p style=" margin:80px 15px 0 8px; font-size:16px; color:#555555; font-family: arial; font-weight:600; text-align: center"> Need Help? </p>
+                                        <p style=" margin: 0 55px 0 40px; font-size:16px; color:#555555; font-family: arial; font-weight:300; text-align: center; line-height:25px;">
+                                            Please send us any feedback or questions to 
+                                            <br/> to <a style="font-size:16px; color:#555555; text-decoration: none;" ; href="#">feedback@wineNrare.com</a>
+                                        </p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="footer-padding"  style=" background: #0e6b38; padding:20px 20px; vertical-align: top" colspan="">
+                                        <table width="100%">
+                                            <tr>
+                                                <td style="font-size:14px; color:#fff; font-family: arial; font-weight:400; text-align: left;line-height:25px; vertical-align: top;">
+                                                    Copyright © 2017 wine and rare - All Rights Reserved,
+                                                    <br/> 365 Liberty Road, 
+                                                    <br/> Stewartsville N.J. 08886
+                                                    <!-- <br/> (999) 999-9999 -->
+                                                </td>
+                                                <td style="vertical-align: top; width: 130px;">
+                                                    <a style="margin: 0 0 3px" href="javascript:void(0)"><img src="{baseUrl}/assets/images/facebook.png"></a>
+                                                    <a style="margin: 0 0 3px" href="javascript:void(0)"><img src="{baseUrl}/assets/images/twitter.png"></a>
+                                                    <a style="margin: 0 0 3px" href="javascript:void(0)"><img src="{baseUrl}/assets/images/linkedin.png"></a>
+                                                    <a style="margin: 0 0 3px" href="javascript:void(0)"><img src="{baseUrl}/assets/images/instagram.png"></a>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>

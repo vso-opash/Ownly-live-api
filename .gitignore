@@ -1,0 +1,8 @@
+
+/config/db.js
+/config/config.js
+
+# dependencies
+node_modules
+*-lock.json
+package-lock.json

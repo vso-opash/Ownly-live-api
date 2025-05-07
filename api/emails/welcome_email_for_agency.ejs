@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+    <title>Ownly</title>
+</head>
+
+<body>
+    <table style="width: 100%;font-family: SF Text;">
+        <tr>
+            <td></td>
+            <td bgcolor=" #FFFFFF ">
+                <div style=" padding: 15px; max-width: 600px;margin: 0
+        auto;display: block; border-radius: 0px;padding: 0px;box-shadow: 0 5px 10px rgba(0,0,0,0.3);">
+                    <table style="width: 100%;background: #142540 ;">
+                        <tr>
+                            <td></td>
+                            <td>
+                                <div>
+                                    <table width="100%">
+                                        <tr>
+                                            <td rowspan="2" style="text-align:center;padding:10px;">
+                                                <img src='<%=logoURL%>' />
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </td>
+                            <td></td>
+                        </tr>
+                    </table>
+                    <table style="padding:10px;font-size:14px; width:100%;">
+                        <tr>
+                            <td style="padding:10px;font-size:14px; width:100%;">
+                                <p><strong> Dear <%= firstName %>, </strong></p>
+                                <p><br /> You have been invited to join Ownly. Please follow the link below to activate
+                                    and access
+                                    your account.</p>
+                                <p>Email: <%= email %> </p>
+                                <p>Temp Password: <%= password %> </p>
+                                <p> <br /> Please make sure you change the password as soon as you login.</p>
+                                <p><a target="_blank"
+                                        style="display:block;background:#2AA8D7; width:150px; line-height:28px; color:#fff; font-size:13px; border-radius:4px; text-decoration:none;text-align:center; margin-bottom:15px;"
+                                        href='<%=loginURL%>'> Login
+                                    </a>
+                                </p>
+                                <p><br />Thanks for choosing Ownly,</p>
+                                <p>Ownly Team.</p>
+                            </td>
+                        </tr>
+                    </table>
+                    <table style="width: 100%;background: #b3b3c3; color: #fff;">
+                        <tr>
+                            <td>
+                                <div align="center" style="font-size:12px;margin: 10px 0px; padding:5px; width:100%;">©
+                                    2020 <a href="#" style="text-decoration:none;color:#fff;">ownly.com.au</a>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>

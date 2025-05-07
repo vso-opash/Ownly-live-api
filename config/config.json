@@ -1,0 +1,36 @@
+    {
+        "development": {
+            "config_id": "developement",
+            "URI": "mongodb://13.54.34.150:27017/admin",
+            "dbUser": "syncitt",
+            "dbPass": "syncitt@123",
+            "STAGGING_URL": "http://portal.syncitt.world/",
+            "STAGGING_URL_WITH_PORT": "http://portal.syncitt.world:5094/",
+            "LOCAL_URL_ADMIN": "http://portal.syncitt.world/admin/",
+            "PUBLIC_STAGGING_URL": "http://syncitt.world/",
+            "API_URL": "http://13.54.34.150:5095/",
+            "stripeSecretKey": "sk_test_GoLFgKL6HJhNsCQ2lFLxcTbO00tdgykfrB",
+            "IS_HTTPS": false,
+            "accountSid": "AC4e2e98d6688d2c50c6a2d63212a1ac83",
+            "authToken": "2b4a45127c429c7da8cd5b38c2bda907",
+            "authUser": "apikey",
+            "authpass": "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"
+        },
+        "production": {
+            "config_id": "production",
+            "URI": "mongodb://52.65.124.36:27017/admin",
+            "dbUser": "syncitt",
+            "dbPass": "syncitt@123",
+            "STAGGING_URL": "https://portal.ownly.com.au/",
+            "STAGGING_URL_WITH_PORT": "https://portal.ownly.com.au:5094/",
+            "LOCAL_URL_ADMIN": "https://portal.ownly.com.au/admin/",
+            "PUBLIC_STAGGING_URL": "https://ownly.com.au/",
+            "API_URL": "https://portal.ownly.com.au:5095/",
+            "stripeSecretKey": "sk_live_fyC4be1evYk9IVZBUxyMsj4o00mpjHPG5Q",
+            "IS_HTTPS": true,
+            "accountSid": "AC4e2e98d6688d2c50c6a2d63212a1ac83",
+            "authToken": "2b4a45127c429c7da8cd5b38c2bda907",
+            "authUser": "apikey",
+            "authpass": "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"
+        }
+    }

@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+    <title>Email </title>
+</head>
+
+<body>
+    <table
+        style="font-family:Roboto;max-width:800px;width:81%;border-radius:4px;margin:0 auto;border-spacing:0;background: #3b4856;display: block;">
+        <tr>
+            <td style="border:0;
+                        width: 800px;
+                        padding: 130px 0 180px 0px;
+                        background:#3b4856;
+                        border-spacing:0;
+                        text-align:center;
+                        background: url( 'https://portal.ownly.com.au/assets/images/img-001.jpg') no-repeat center 0;
+                        background-size:contain">
+                <table
+                    style="width:80%;margin-left:auto;margin-right:auto;border-spacing:0;border-radius:4px;background:#fff;border-radius:10px;border-spacing:0">
+                    <tr>
+                        <td style="padding:20px; text-align:left;">
+                            <table style="width:100%; margin:0; border-spacing:0; border-spacing: 0;">
+                                <tr>
+                                    <td style="color:#7C888D; font-size:15px; line-height:normal; padding-bottom:20px;">
+                                        Dear <%= traderName %>,</td>
+                                </tr>
+                                <tr>
+                                    <td style="color:#7C888D; font-size:15px; line-height:normal; padding-bottom:40px;">
+                                        <%= consumerName %> has declined your proposal.
+                                        <a href="<%=maintenanceURL%>">
+                                            <b>Click Here</b>
+                                        </a>
+                                        to resubmit another counter proposal.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="color:#7C888D; font-size:15px; line-height:normal;">Regards,</td>
+                                </tr>
+                                <tr>
+                                    <td style="color:#7C888D; font-size:15px; line-height:normal;">Ownly Team </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>
