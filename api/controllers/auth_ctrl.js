@@ -31,8 +31,10 @@ var currentYear = d.getFullYear();
 var bcrypt = require('bcrypt');
 var forEach = require('async-foreach').forEach;
 //Twillio 
-var accountSid = (Constant.TWILLIO_ACCOUNT_ID) ? Constant.TWILLIO_ACCOUNT_ID : 'ACbc845974516c288934600a9073e0ca16';
-var authToken = (Constant.TWILLIO_AUTH_TOKEN) ? Constant.TWILLIO_AUTH_TOKEN : '0bb8699484c388876590bd6dd16d45e7';
+// var accountSid = (Constant.TWILLIO_ACCOUNT_ID) ? Constant.TWILLIO_ACCOUNT_ID : 'ACbc845974516c288934600a9073e0ca16';
+// var authToken = (Constant.TWILLIO_AUTH_TOKEN) ? Constant.TWILLIO_AUTH_TOKEN : '0bb8699484c388876590bd6dd16d45e7';
+var accountSid = (Constant.TWILLIO_ACCOUNT_ID) ? Constant.TWILLIO_ACCOUNT_ID : 'AC4e2e98d6688d2c50c6a2d63212a1ac83';
+var authToken = (Constant.TWILLIO_AUTH_TOKEN) ? Constant.TWILLIO_AUTH_TOKEN : '2b4a45127c429c7da8cd5b38c2bda907';
 var twilio = require('twilio');
 var client = new twilio(accountSid, authToken);
 //OTP 
@@ -48,8 +50,10 @@ var currentYear = d.getFullYear();
 
 
 //Twillio 
-var accountSid = (Constant.TWILLIO_ACCOUNT_ID) ? Constant.TWILLIO_ACCOUNT_ID : 'ACbc845974516c288934600a9073e0ca16';
-var authToken = (Constant.TWILLIO_AUTH_TOKEN) ? Constant.TWILLIO_AUTH_TOKEN : '0bb8699484c388876590bd6dd16d45e7';
+// var accountSid = (Constant.TWILLIO_ACCOUNT_ID) ? Constant.TWILLIO_ACCOUNT_ID : 'ACbc845974516c288934600a9073e0ca16';
+// var authToken = (Constant.TWILLIO_AUTH_TOKEN) ? Constant.TWILLIO_AUTH_TOKEN : '0bb8699484c388876590bd6dd16d45e7';
+var accountSid = (Constant.TWILLIO_ACCOUNT_ID) ? Constant.TWILLIO_ACCOUNT_ID : 'AC4e2e98d6688d2c50c6a2d63212a1ac83';
+var authToken = (Constant.TWILLIO_AUTH_TOKEN) ? Constant.TWILLIO_AUTH_TOKEN : '2b4a45127c429c7da8cd5b38c2bda907';
 var twilio = require('twilio');
 var client = new twilio(accountSid, authToken);
 

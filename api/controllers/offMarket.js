@@ -358,7 +358,7 @@ function sendMailForChat(req, res) {
                   '<table width="100%">' +
                   "<tr>" +
                   '<td rowspan="2" style="text-align:center;padding:10px;">' +
-                  // '<img src="' + Constant.STAGGING_URL + 'assets/images/logo-public-home.png"/>' +
+                  '<img src="' + Constant.STAGGING_URL + 'assets/images/logo-public-home.png"/>' +
                   "</td>" +
                   "</tr>" +
                   "</table>" +
