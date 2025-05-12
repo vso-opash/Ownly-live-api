@@ -5243,7 +5243,8 @@ function applyForQuote(req, res) {
                                     '<td style="color:#7C888D; font-size:15px; line-height:normal; padding-bottom:40px;">You can login to your account to get in contact or ask a quick question using our chat.</td>' +
                                     '</tr>' +
                                     '<tr>' +
-                                    '<td style="color:#7C888D; font-size:15px; line-height:normal; padding-bottom:40px;"><a  style="display:block;background:#2AA8D7; width:150px; line-height:28px; color:#fff; font-size:13px; border-radius:4px; text-decoration:none;text-align:center; margin-bottom:15px;" href="' + Constant.STAGGING_URL + '#!/login' + '">Log in to view quote</a>' +
+                                    // '<td style="color:#7C888D; font-size:15px; line-height:normal; padding-bottom:40px;"><a  style="display:block;background:#2AA8D7; width:150px; line-height:28px; color:#fff; font-size:13px; border-radius:4px; text-decoration:none;text-align:center; margin-bottom:15px;" href="' + Constant.STAGGING_URL + '#!/login' + '">Log in to view quote</a>' +
+                                    '<td style="color:#7C888D; font-size:15px; line-height:normal; padding-bottom:40px;"><a  style="display:block;background:#2AA8D7; width:150px; line-height:28px; color:#fff; font-size:13px; border-radius:4px; text-decoration:none;text-align:center; margin-bottom:15px;" href="' + Constant.STAGGING_URL + '#!/quote_detail/' + proposalData.maintenance_id + '/' + proposalData.proposal_created_by +'">View quote</a>' +
                                     '</td>' +
                                     '</tr>';
 
