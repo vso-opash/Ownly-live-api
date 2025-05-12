@@ -1,4 +1,4 @@
-const Constant = require('../controllers/constant.js')
+const Constant = require('./../../config/constant.js')
 /* @function : sendmessage
  *  @author  : Abhishek
  *  @created  :
