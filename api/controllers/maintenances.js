@@ -4824,7 +4824,7 @@ function addMR(req, res) {
                                                                     to: mailOptions.to,
                                                                     subject: mailOptions.subject,
                                                                     text: mailOptions.subject,
-                                                                    html: mailOptions.html
+                                                                    html: mailOptions.html + '?roleId=' + Constant.TRADER
                                                                 }, function (error, response) {
                                                                     if (error) {
                                                                         console.log("Trader quote email error: ", error);
@@ -4834,7 +4834,7 @@ function addMR(req, res) {
                                                                             business_name: value.business_name,
                                                                             title: maintenanaceData.request_overview,
                                                                             budget: maintenanaceData.budget,
-                                                                            quote_link: quote_link
+                                                                            quote_link: quote_link + '?roleId=' + Constant.TRADER
                                                                         }
                                                                         console.log('maintenanaceData :: addMR=> ', maintenanaceData);
                                                                         console.log("Message sent: Successfully 2 ", mailOptions.to);
