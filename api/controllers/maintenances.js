@@ -4388,12 +4388,25 @@ function addMR(req, res) {
                                                         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
                                                         <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
                                                         <title>Email</title>
+                                                        <style>
+                                                            @media only screen and (max-width: 600px) {
+                                                                .container-table { width: 100% !important; max-width: 100% !important; }
+                                                                .background-container { padding: 10px !important; }
+                                                                .content-table { width: 100% !important; padding: 10px !important; }
+                                                                img { max-width: 100% !important; height: auto !important; }
+                                                            }
+                                                        </style>
                                                     </head>
                                                     <body>
-                                                        <table style="font-family:Roboto;max-width:800px;width:100%;border-radius:4px;margin:0 auto;border-spacing:0;background:#3b4856;">
+                                                        <table class="container-table" style="font-family:Roboto;max-width:800px;width:100%;border-radius:4px;margin:0 auto;border-spacing:0;background:#3b4856;">
                                                             <tr>
-                                                                <td style="border:0;padding:130px 0 180px 0px;background:#3b4856;border-spacing:0;text-align:center;background:url(${Constant.STAGGING_URL}assets/images/img-001.jpg) no-repeat center 0;background-size:contain">
-                                                                    <table style="width:90%;margin-left:auto;margin-right:auto;border-spacing:0;border-radius:4px;background:#fff;border-radius:10px;border-spacing:0">
+                                                                <td class="background-container" style="border:0;padding:20px 0;background:#3b4856;border-spacing:0;text-align:center;">
+                                                                    <table class="content-table" style="width:90%;margin-left:auto;margin-right:auto;border-spacing:0;border-radius:4px;background:#fff;border-radius:10px;border-spacing:0">
+                                                                        <tr>
+                                                                            <td style="padding:0;text-align:center;">
+                                                                                <img src="${Constant.STAGGING_URL}assets/images/img-001.jpg" style="max-width:100%;height:auto;display:block;margin:0 auto;" alt="Ownly Trade Brand Image">
+                                                                            </td>
+                                                                        </tr>
                                                                         <tr>
                                                                             <td style="padding:20px;text-align:left;">
                                                                                 <table style="width:100%;margin:0;border-spacing:0;">
@@ -4403,20 +4416,23 @@ function addMR(req, res) {
                                                                                     <tr>
                                                                                         <td style="color:#7C888D;font-size:15px;line-height:normal;padding-bottom:40px;">A new maintenance request titled "${request_overview}" has been assigned to you by ${createdByData.firstname} ${createdByData.lastname}.</td>
                                                                                     </tr>
+                                                                                    ${images && images.length > 0 ? `
+                                                                                    <tr>
+                                                                                        <td style="padding-bottom:20px;">
+                                                                                            ${images.map(image => `
+                                                                                                <img src="${image.path}" style="max-width:100%;height:auto;display:block;margin:10px 0;" alt="Maintenance Image">
+                                                                                            `).join('')}
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                    ` : ''}
                                                                                     <tr>
                                                                                         <td style="color:#2E4255;font-size:18px;font-weight:700;line-height:normal;padding:0;margin:0;">Request Details<br><br></td>
                                                                                     </tr>
                                                                                     <tr>
                                                                                         <td>
-                                                                                            <p style="display:flex;padding-bottom:25px;margin:0;">
-                                                                                                <em style="color:#7C888D;font-size:15px;font-style:italic;line-height:normal;font-weight:300;margin-right:25px;">Address: <strong>${address}</strong></em>
-                                                                                            </p>
-                                                                                            <p style="display:flex;padding-bottom:25px;margin:0;">
-                                                                                                <em style="color:#7C888D;font-size:15px;font-style:italic;line-height:normal;font-weight:300;margin-right:25px;">Budget: <strong>${budget}</strong></em>
-                                                                                            </p>
-                                                                                            <p style="display:flex;padding-bottom:25px;margin:0;">
-                                                                                                <em style="color:#7C888D;font-size:15px;font-style:italic;line-height:normal;font-weight:300;margin-right:25px;">Due Date: <strong>${due_date}</strong></em>
-                                                                                            </p>
+                                                                                            <p style="padding-bottom:25px;margin:0;color:#7C888D;font-size:15px;font-style:italic;line-height:normal;font-weight:300;">Address: <strong>${address}</strong></p>
+                                                                                            <p style="padding-bottom:25px;margin:0;color:#7C888D;font-size:15px;font-style:italic;line-height:normal;font-weight:300;">Budget: <strong>${budget}</strong></p>
+                                                                                            <p style="padding-bottom:25px;margin:0;color:#7C888D;font-size:15px;font-style:italic;line-height:normal;font-weight:300;">Due Date: <strong>${due_date}</strong></p>
                                                                                         </td>
                                                                                     </tr>
                                                                                     <tr>
@@ -4464,12 +4480,25 @@ function addMR(req, res) {
                                                     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
                                                     <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
                                                     <title>Email</title>
+                                                    <style>
+                                                        @media only screen and (max-width: 600px) {
+                                                            .container-table { width: 100% !important; max-width: 100% !important; }
+                                                            .background-container { padding: 10px !important; }
+                                                            .content-table { width: 100% !important; padding: 10px !important; }
+                                                            img { max-width: 100% !important; height: auto !important; }
+                                                        }
+                                                    </style>
                                                 </head>
                                                 <body>
-                                                    <table style="font-family:Roboto;max-width:800px;width:100%;border-radius:4px;margin:0 auto;border-spacing:0;background:#3b4856;">
+                                                    <table class="container-table" style="font-family:Roboto;max-width:800px;width:100%;border-radius:4px;margin:0 auto;border-spacing:0;background:#3b4856;">
                                                         <tr>
-                                                            <td style="border:0;padding:130px 0 180px 0px;background:#3b4856;border-spacing:0;text-align:center;background:url(${Constant.STAGGING_URL}assets/images/img-001.jpg) no-repeat center 0;background-size:contain">
-                                                                <table style="width:90%;margin-left:auto;margin-right:auto;border-spacing:0;border-radius:4px;background:#fff;border-radius:10px;border-spacing:0">
+                                                            <td class="background-container" style="border:0;padding:20px 0;background:#3b4856;border-spacing:0;text-align:center;">
+                                                                <table class="content-table" style="width:90%;margin-left:auto;margin-right:auto;border-spacing:0;border-radius:4px;background:#fff;border-radius:10px;border-spacing:0">
+                                                                    <tr>
+                                                                        <td style="padding:0;text-align:center;">
+                                                                            <img src="${Constant.STAGGING_URL}assets/images/img-001.jpg" style="max-width:100%;height:auto;display:block;margin:0 auto;" alt="Ownly Trade Brand Image">
+                                                                        </td>
+                                                                    </tr>
                                                                     <tr>
                                                                         <td style="padding:20px;text-align:left;">
                                                                             <table style="width:100%;margin:0;border-spacing:0;">
@@ -4479,20 +4508,23 @@ function addMR(req, res) {
                                                                                 <tr>
                                                                                     <td style="color:#7C888D;font-size:15px;line-height:normal;padding-bottom:40px;">Your maintenance request titled "${request_overview}" has been successfully created.</td>
                                                                                 </tr>
+                                                                                ${images && images.length > 0 ? `
+                                                                                <tr>
+                                                                                    <td style="padding-bottom:20px;">
+                                                                                        ${images.map(image => `
+                                                                                            <img src="${image.path}" style="max-width:100%;height:auto;display:block;margin:10px 0;" alt="Maintenance Image">
+                                                                                        `).join('')}
+                                                                                    </td>
+                                                                                </tr>
+                                                                                ` : ''}
                                                                                 <tr>
                                                                                     <td style="color:#2E4255;font-size:18px;font-weight:700;line-height:normal;padding:0;margin:0;">Request Details<br><br></td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <p style="display:flex;padding-bottom:25px;margin:0;">
-                                                                                            <em style="color:#7C888D;font-size:15px;font-style:italic;line-height:normal;font-weight:300;margin-right:25px;">Address: <strong>${address}</strong></em>
-                                                                                        </p>
-                                                                                        <p style="display:flex;padding-bottom:25px;margin:0;">
-                                                                                            <em style="color:#7C888D;font-size:15px;font-style:italic;line-height:normal;font-weight:300;margin-right:25px;">Budget: <strong>${budget}</strong></em>
-                                                                                        </p>
-                                                                                        <p style="display:flex;padding-bottom:25px;margin:0;">
-                                                                                            <em style="color:#7C888D;font-size:15px;font-style:italic;line-height:normal;font-weight:300;margin-right:25px;">Due Date: <strong>${due_date}</strong></em>
-                                                                                        </p>
+                                                                                        <p style="padding-bottom:25px;margin:0;color:#7C888D;font-size:15px;font-style:italic;line-height:normal;font-weight:300;">Address: <strong>${address}</strong></p>
+                                                                                        <p style="padding-bottom:25px;margin:0;color:#7C888D;font-size:15px;font-style:italic;line-height:normal;font-weight:300;">Budget: <strong>${budget}</strong></p>
+                                                                                        <p style="padding-bottom:25px;margin:0;color:#7C888D;font-size:15px;font-style:italic;line-height:normal;font-weight:300;">Due Date: <strong>${due_date}</strong></p>
                                                                                     </td>
                                                                                 </tr>
                                                                                 <tr>
@@ -4539,12 +4571,25 @@ function addMR(req, res) {
                                                     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
                                                     <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
                                                     <title>Email</title>
+                                                    <style>
+                                                        @media only screen and (max-width: 600px) {
+                                                            .container-table { width: 100% !important; max-width: 100% !important; }
+                                                            .background-container { padding: 10px !important; }
+                                                            .content-table { width: 100% !important; padding: 10px !important; }
+                                                            img { max-width: 100% !important; height: auto !important; }
+                                                        }
+                                                    </style>
                                                 </head>
                                                 <body>
-                                                    <table style="font-family:Roboto;max-width:800px;width:100%;border-radius:4px;margin:0 auto;border-spacing:0;background:#3b4856;">
+                                                    <table class="container-table" style="font-family:Roboto;max-width:800px;width:100%;border-radius:4px;margin:0 auto;border-spacing:0;background:#3b4856;">
                                                         <tr>
-                                                            <td style="border:0;padding:130px 0 180px 0px;background:#3b4856;border-spacing:0;text-align:center;background:url(${Constant.STAGGING_URL}assets/images/img-001.jpg) no-repeat center 0;background-size:contain">
-                                                                <table style="width:90%;margin-left:auto;margin-right:auto;border-spacing:0;border-radius:4px;background:#fff;border-radius:10px;border-spacing:0">
+                                                            <td class="background-container" style="border:0;padding:20px 0;background:#3b4856;border-spacing:0;text-align:center;">
+                                                                <table class="content-table" style="width:90%;margin-left:auto;margin-right:auto;border-spacing:0;border-radius:4px;background:#fff;border-radius:10px;border-spacing:0">
+                                                                    <tr>
+                                                                        <td style="padding:0;text-align:center;">
+                                                                            <img src="${Constant.STAGGING_URL}assets/images/img-001.jpg" style="max-width:100%;height:auto;display:block;margin:0 auto;" alt="Ownly Trade Brand Image">
+                                                                        </td>
+                                                                    </tr>
                                                                     <tr>
                                                                         <td style="padding:20px;text-align:left;">
                                                                             <table style="width:100%;margin:0;border-spacing:0;">
@@ -4557,6 +4602,15 @@ function addMR(req, res) {
                                                                                 <tr>
                                                                                     <td style="color:#7C888D;font-size:15px;line-height:normal;padding-bottom:40px;">Please <a href="${Constant.PUBLIC_STAGGING_URL}consumer_account_activation/${activation_code}/${maintenance_id}"><b>click here</b></a> to activate your account ${email} and stay up to date with your Trade Request.</td>
                                                                                 </tr>
+                                                                                ${images && images.length > 0 ? `
+                                                                                <tr>
+                                                                                    <td style="padding-bottom:20px;">
+                                                                                        ${images.map(image => `
+                                                                                            <img src="${image.path}" style="max-width:100%;height:auto;display:block;margin:10px 0;" alt="Maintenance Image">
+                                                                                        `).join('')}
+                                                                                    </td>
+                                                                                </tr>
+                                                                                ` : ''}
                                                                                 <tr>
                                                                                     <td style="color:#2E4255;font-size:18px;font-weight:700;line-height:normal;padding:0;margin:0;">
                                                                                         <a target="_blank" href="${Constant.PUBLIC_STAGGING_URL}consumer_account_activation/${activation_code}/${maintenance_id}" style="display:block;background:#2AA8D7;width:150px;line-height:28px;color:#fff;font-size:13px;border-radius:4px;text-decoration:none;text-align:center;margin-bottom:15px;">Activate My Account</a><br>
@@ -4564,18 +4618,10 @@ function addMR(req, res) {
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <p style="display:flex;padding-bottom:25px;margin:0;">
-                                                                                            <em style="color:#7C888D;font-size:15px;font-style:italic;line-height:normal;font-weight:300;margin-right:25px;">- Communicate with your trader</em>
-                                                                                        </p>
-                                                                                        <p style="display:flex;padding-bottom:25px;margin:0;">
-                                                                                            <em style="color:#7C888D;font-size:15px;font-style:italic;line-height:normal;font-weight:300;margin-right:25px;">- Add any new files</em>
-                                                                                        </p>
-                                                                                        <p style="display:flex;padding-bottom:25px;margin:0;">
-                                                                                            <em style="color:#7C888D;font-size:15px;font-style:italic;line-height:normal;font-weight:300;margin-right:25px;">- Cancel your request</em>
-                                                                                        </p>
-                                                                                        <p style="display:flex;padding-bottom:25px;margin:0;">
-                                                                                            <em style="color:#7C888D;font-size:15px;font-style:italic;line-height:normal;font-weight:300;margin-right:25px;">- Review your traders work</em>
-                                                                                        </p>
+                                                                                        <p style="padding-bottom:25px;margin:0;color:#7C888D;font-size:15px;font-style:italic;line-height:normal;font-weight:300;">- Communicate with your trader</p>
+                                                                                        <p style="padding-bottom:25px;margin:0;color:#7C888D;font-size:15px;font-style:italic;line-height:normal;font-weight:300;">- Add any new files</p>
+                                                                                        <p style="padding-bottom:25px;margin:0;color:#7C888D;font-size:15px;font-style:italic;line-height:normal;font-weight:300;">- Cancel your request</p>
+                                                                                        <p style="padding-bottom:25px;margin:0;color:#7C888D;font-size:15px;font-style:italic;line-height:normal;font-weight:300;">- Review your traders work</p>
                                                                                     </td>
                                                                                 </tr>
                                                                                 <tr>
@@ -4701,12 +4747,25 @@ function addMR(req, res) {
                                                                             <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
                                                                             <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
                                                                             <title>Email</title>
+                                                                            <style>
+                                                                                @media only screen and (max-width: 600px) {
+                                                                                    .container-table { width: 100% !important; max-width: 100% !important; }
+                                                                                    .background-container { padding: 10px !important; }
+                                                                                    .content-table { width: 100% !important; padding: 10px !important; }
+                                                                                    img { max-width: 100% !important; height: auto !important; }
+                                                                                }
+                                                                            </style>
                                                                         </head>
                                                                         <body>
-                                                                            <table style="font-family:Roboto;max-width:800px;width:100%;border-radius:4px;margin:0 auto;border-spacing:0;background:#3b4856;">
+                                                                            <table class="container-table" style="font-family:Roboto;max-width:800px;width:100%;border-radius:4px;margin:0 auto;border-spacing:0;background:#3b4856;">
                                                                                 <tr>
-                                                                                    <td style="border:0;padding:130px 0 180px 0px;background:#3b4856;border-spacing:0;text-align:center;background:url(${Constant.STAGGING_URL}assets/images/img-001.jpg) no-repeat center 0;background-size:contain">
-                                                                                        <table style="width:90%;margin-left:auto;margin-right:auto;border-spacing:0;border-radius:4px;background:#fff;border-radius:10px;border-spacing:0">
+                                                                                    <td class="background-container" style="border:0;padding:20px 0;background:#3b4856;border-spacing:0;text-align:center;">
+                                                                                        <table class="content-table" style="width:90%;margin-left:auto;margin-right:auto;border-spacing:0;border-radius:4px;background:#fff;border-radius:10px;border-spacing:0">
+                                                                                            <tr>
+                                                                                                <td style="padding:0;text-align:center;">
+                                                                                                    <img src="${Constant.STAGGING_URL}assets/images/img-001.jpg" style="max-width:100%;height:auto;display:block;margin:0 auto;" alt="Ownly Trade Brand Image">
+                                                                                                </td>
+                                                                                            </tr>
                                                                                             <tr>
                                                                                                 <td style="padding:20px;text-align:left;">
                                                                                                     <table style="width:100%;margin:0;border-spacing:0;">
@@ -4716,23 +4775,24 @@ function addMR(req, res) {
                                                                                                         <tr>
                                                                                                             <td style="color:#7C888D;font-size:15px;line-height:normal;padding-bottom:40px;">One of our users on the Ownly Trade platform has viewed your profile and would like you to quote on a new job.</td>
                                                                                                         </tr>
+                                                                                                        ${images && images.length > 0 ? `
+                                                                                                        <tr>
+                                                                                                            <td style="padding-bottom:20px;">
+                                                                                                                ${images.map(image => `
+                                                                                                                    <img src="${image.path}" style="max-width:100%;height:auto;display:block;margin:10px 0;" alt="Maintenance Image">
+                                                                                                                `).join('')}
+                                                                                                            </td>
+                                                                                                        </tr>
+                                                                                                        ` : ''}
                                                                                                         <tr>
                                                                                                             <td style="color:#2E4255;font-size:18px;font-weight:700;line-height:normal;padding:0;margin:0;">Job details<br><br></td>
                                                                                                         </tr>
                                                                                                         <tr>
                                                                                                             <td>
-                                                                                                                <p style="display:flex;padding-bottom:25px;margin:0;">
-                                                                                                                    <em style="color:#7C888D;font-size:15px;font-style:italic;line-height:normal;font-weight:300;margin-right:25px;">Title: <strong>${request_overview}</strong></em>
-                                                                                                                </p>
-                                                                                                                <p style="display:flex;padding-bottom:25px;margin:0;">
-                                                                                                                    <em style="color:#7C888D;font-size:15px;font-style:italic;line-height:normal;font-weight:300;margin-right:25px;">Description: <strong>${request_detail}</strong></em>
-                                                                                                                </p>
-                                                                                                                <p style="display:flex;padding-bottom:25px;margin:0;">
-                                                                                                                    <em style="color:#7C888D;font-size:15px;font-style:italic;line-height:normal;font-weight:300;margin-right:25px;">Budget: <strong>${budget}</strong></em>
-                                                                                                                </p>
-                                                                                                                <p style="display:flex;padding-bottom:25px;margin:0;">
-                                                                                                                    <em style="color:#7C888D;font-size:15px;font-style:italic;line-height:normal;font-weight:300;margin-right:25px;">Due Date: <strong>${due_date}</strong></em>
-                                                                                                                </p>
+                                                                                                                <p style="padding-bottom:25px;margin:0;color:#7C888D;font-size:15px;font-style:italic;line-height:normal;font-weight:300;">Title: <strong>${request_overview}</strong></p>
+                                                                                                                <p style="padding-bottom:25px;margin:0;color:#7C888D;font-size:15px;font-style:italic;line-height:normal;font-weight:300;">Description: <strong>${request_detail}</strong></p>
+                                                                                                                <p style="padding-bottom:25px;margin:0;color:#7C888D;font-size:15px;font-style:italic;line-height:normal;font-weight:300;">Budget: <strong>${budget}</strong></p>
+                                                                                                                <p style="padding-bottom:25px;margin:0;color:#7C888D;font-size:15px;font-style:italic;line-height:normal;font-weight:300;">Due Date: <strong>${due_date}</strong></p>
                                                                                                             </td>
                                                                                                         </tr>
                                                                                                         <tr>
@@ -4797,12 +4857,25 @@ function addMR(req, res) {
                                                                             <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
                                                                             <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
                                                                             <title>Email</title>
+                                                                            <style>
+                                                                                @media only screen and (max-width: 600px) {
+                                                                                    .container-table { width: 100% !important; max-width: 100% !important; }
+                                                                                    .background-container { padding: 10px !important; }
+                                                                                    .content-table { width: 100% !important; padding: 10px !important; }
+                                                                                    img { max-width: 100% !important; height: auto !important; }
+                                                                                }
+                                                                            </style>
                                                                         </head>
                                                                         <body>
-                                                                            <table style="font-family:Roboto;max-width:800px;width:100%;border-radius:4px;margin:0 auto;border-spacing:0;background:#3b4856;">
+                                                                            <table class="container-table" style="font-family:Roboto;max-width:800px;width:100%;border-radius:4px;margin:0 auto;border-spacing:0;background:#3b4856;">
                                                                                 <tr>
-                                                                                    <td style="border:0;padding:130px 0 180px 0px;background:#3b4856;border-spacing:0;text-align:center;background:url(${Constant.STAGGING_URL}assets/images/img-001.jpg) no-repeat center 0;background-size:contain">
-                                                                                        <table style="width:90%;margin-left:auto;margin-right:auto;border-spacing:0;border-radius:4px;background:#fff;border-radius:10px;border-spacing:0">
+                                                                                    <td class="background-container" style="border:0;padding:20px 0;background:#3b4856;border-spacing:0;text-align:center;">
+                                                                                        <table class="content-table" style="width:90%;margin-left:auto;margin-right:auto;border-spacing:0;border-radius:4px;background:#fff;border-radius:10px;border-spacing:0">
+                                                                                            <tr>
+                                                                                                <td style="padding:0;text-align:center;">
+                                                                                                    <img src="${Constant.STAGGING_URL}assets/images/img-001.jpg" style="max-width:100%;height:auto;display:block;margin:0 auto;" alt="Ownly Trade Brand Image">
+                                                                                                </td>
+                                                                                            </tr>
                                                                                             <tr>
                                                                                                 <td style="padding:20px;text-align:left;">
                                                                                                     <table style="width:100%;margin:0;border-spacing:0;">
@@ -4812,6 +4885,15 @@ function addMR(req, res) {
                                                                                                         <tr>
                                                                                                             <td style="color:#7C888D;font-size:15px;line-height:normal;padding-bottom:40px;">As you know, unlike other search platforms, we give all <b>TRADES A FAIR GO.</b> We help you <b>PROMOTE, SECURE</b> AND <b>GROW</b> YOUR BUSINESS.</td>
                                                                                                         </tr>
+                                                                                                        ${images && images.length > 0 ? `
+                                                                                                        <tr>
+                                                                                                            <td style="padding-bottom:20px;">
+                                                                                                                ${images.map(image => `
+                                                                                                                    <img src="${image.path}" style="max-width:100%;height:auto;display:block;margin:10px 0;" alt="Maintenance Image">
+                                                                                                                `).join('')}
+                                                                                                            </td>
+                                                                                                        </tr>
+                                                                                                        ` : ''}
                                                                                                         <tr>
                                                                                                             <td style="padding:25px;">
                                                                                                                 <table style="width:100%;margin:0 auto;border:0;border-spacing:0;text-align:left;">
@@ -4957,12 +5039,25 @@ function addMR(req, res) {
                                                                             <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
                                                                             <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
                                                                             <title>Email</title>
+                                                                            <style>
+                                                                                @media only screen and (max-width: 600px) {
+                                                                                    .container-table { width: 100% !important; max-width: 100% !important; }
+                                                                                    .background-container { padding: 10px !important; }
+                                                                                    .content-table { width: 100% !important; padding: 10px !important; }
+                                                                                    img { max-width: 100% !important; height: auto !important; }
+                                                                                }
+                                                                            </style>
                                                                         </head>
                                                                         <body>
-                                                                            <table style="font-family:Roboto;max-width:800px;width:100%;border-radius:4px;margin:0 auto;border-spacing:0;background:#3b4856;display:block;">
+                                                                            <table class="container-table" style="font-family:Roboto;max-width:800px;width:100%;border-radius:4px;margin:0 auto;border-spacing:0;background:#3b4856;">
                                                                                 <tr>
-                                                                                    <td style="border:0;padding:130px 0 180px 0px;background:#3b4856;border-spacing:0;text-align:center;background:url(${Constant.STAGGING_URL}assets/images/img-001.jpg) no-repeat center 0;background-size:contain">
-                                                                                        <table style="width:90%;margin-left:auto;margin-right:auto;border-spacing:0;border-radius:4px;background:#fff;border-radius:10px;border-spacing:0">
+                                                                                    <td class="background-container" style="border:0;padding:20px 0;background:#3b4856;border-spacing:0;text-align:center;">
+                                                                                        <table class="content-table" style="width:90%;margin-left:auto;margin-right:auto;border-spacing:0;border-radius:4px;background:#fff;border-radius:10px;border-spacing:0">
+                                                                                            <tr>
+                                                                                                <td style="padding:0;text-align:center;">
+                                                                                                    <img src="${Constant.STAGGING_URL}assets/images/img-001.jpg" style="max-width:100%;height:auto;display:block;margin:0 auto;" alt="Ownly Trade Brand Image">
+                                                                                                </td>
+                                                                                            </tr>
                                                                                             <tr>
                                                                                                 <td style="padding:20px;text-align:left;">
                                                                                                     <table style="width:100%;margin:0;border-spacing:0;">
@@ -4972,23 +5067,24 @@ function addMR(req, res) {
                                                                                                         <tr>
                                                                                                             <td style="color:#7C888D;font-size:15px;line-height:normal;padding-bottom:40px;">One of our users on the Ownly Trade platform has posted a job in your area.</td>
                                                                                                         </tr>
+                                                                                                        ${images && images.length > 0 ? `
+                                                                                                        <tr>
+                                                                                                            <td style="padding-bottom:20px;">
+                                                                                                                ${images.map(image => `
+                                                                                                                    <img src="${image.path}" style="max-width:100%;height:auto;display:block;margin:10px 0;" alt="Maintenance Image">
+                                                                                                                `).join('')}
+                                                                                                            </td>
+                                                                                                        </tr>
+                                                                                                        ` : ''}
                                                                                                         <tr>
                                                                                                             <td style="color:#2E4255;font-size:18px;font-weight:700;line-height:normal;padding:0;margin:0;">Job details<br><br></td>
                                                                                                         </tr>
                                                                                                         <tr>
                                                                                                             <td>
-                                                                                                                <p style="display:flex;padding-bottom:25px;margin:0;">
-                                                                                                                    <em style="color:#7C888D;font-size:15px;font-style:italic;line-height:normal;font-weight:300;margin-right:25px;">Title: <strong>${request_overview}</strong></em>
-                                                                                                                </p>
-                                                                                                                <p style="display:flex;padding-bottom:25px;margin:0;">
-                                                                                                                    <em style="color:#7C888D;font-size:15px;font-style:italic;line-height:normal;font-weight:300;margin-right:25px;">Description: <strong>${request_detail}</strong></em>
-                                                                                                                </p>
-                                                                                                                <p style="display:flex;padding-bottom:25px;margin:0;">
-                                                                                                                    <em style="color:#7C888D;font-size:15px;font-style:italic;line-height:normal;font-weight:300;margin-right:25px;">Budget: <strong>${budget}</strong></em>
-                                                                                                                </p>
-                                                                                                                <p style="display:flex;padding-bottom:25px;margin:0;">
-                                                                                                                    <em style="color:#7C888D;font-size:15px;font-style:italic;line-height:normal;font-weight:300;margin-right:25px;">Due Date: <strong>${due_date}</strong></em>
-                                                                                                                </p>
+                                                                                                                <p style="padding-bottom:25px;margin:0;color:#7C888D;font-size:15px;font-style:italic;line-height:normal;font-weight:300;">Title: <strong>${request_overview}</strong></p>
+                                                                                                                <p style="padding-bottom:25px;margin:0;color:#7C888D;font-size:15px;font-style:italic;line-height:normal;font-weight:300;">Description: <strong>${request_detail}</strong></p>
+                                                                                                                <p style="padding-bottom:25px;margin:0;color:#7C888D;font-size:15px;font-style:italic;line-height:normal;font-weight:300;">Budget: <strong>${budget}</strong></p>
+                                                                                                                <p style="padding-bottom:25px;margin:0;color:#7C888D;font-size:15px;font-style:italic;line-height:normal;font-weight:300;">Due Date: <strong>${due_date}</strong></p>
                                                                                                             </td>
                                                                                                         </tr>
                                                                                                         <tr>
@@ -5050,12 +5146,25 @@ function addMR(req, res) {
                                                                             <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
                                                                             <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
                                                                             <title>Email</title>
+                                                                            <style>
+                                                                                @media only screen and (max-width: 600px) {
+                                                                                    .container-table { width: 100% !important; max-width: 100% !important; }
+                                                                                    .background-container { padding: 10px !important; }
+                                                                                    .content-table { width: 100% !important; padding: 10px !important; }
+                                                                                    img { max-width: 100% !important; height: auto !important; }
+                                                                                }
+                                                                            </style>
                                                                         </head>
                                                                         <body>
-                                                                            <table style="font-family:Roboto;max-width:800px;width:100%;border-radius:4px;margin:0 auto;border-spacing:0;background:#3b4856;">
+                                                                            <table class="container-table" style="font-family:Roboto;max-width:800px;width:100%;border-radius:4px;margin:0 auto;border-spacing:0;background:#3b4856;">
                                                                                 <tr>
-                                                                                    <td style="border:0;padding:130px 0 180px 0px;background:#3b4856;border-spacing:0;text-align:center;background:url(${Constant.STAGGING_URL}assets/images/img-001.jpg) no-repeat center 0;background-size:contain">
-                                                                                        <table style="width:90%;margin-left:auto;margin-right:auto;border-spacing:0;border-radius:4px;background:#fff;border-radius:10px;border-spacing:0">
+                                                                                    <td class="background-container" style="border:0;padding:20px 0;background:#3b4856;border-spacing:0;text-align:center;">
+                                                                                        <table class="content-table" style="width:90%;margin-left:auto;margin-right:auto;border-spacing:0;border-radius:4px;background:#fff;border-radius:10px;border-spacing:0">
+                                                                                            <tr>
+                                                                                                <td style="padding:0;text-align:center;">
+                                                                                                    <img src="${Constant.STAGGING_URL}assets/images/img-001.jpg" style="max-width:100%;height:auto;display:block;margin:0 auto;" alt="Ownly Trade Brand Image">
+                                                                                                </td>
+                                                                                            </tr>
                                                                                             <tr>
                                                                                                 <td style="padding:20px;text-align:left;">
                                                                                                     <table style="width:100%;margin:0;border-spacing:0;">
@@ -5065,6 +5174,15 @@ function addMR(req, res) {
                                                                                                         <tr>
                                                                                                             <td style="color:#7C888D;font-size:15px;line-height:normal;padding-bottom:40px;">As you know, unlike other search platforms, we give all <b>TRADES A FAIR GO.</b> We help you <b>PROMOTE, SECURE</b> AND <b>GROW</b> YOUR BUSINESS.</td>
                                                                                                         </tr>
+                                                                                                        ${images && images.length > 0 ? `
+                                                                                                        <tr>
+                                                                                                            <td style="padding-bottom:20px;">
+                                                                                                                ${images.map(image => `
+                                                                                                                    <img src="${image.path}" style="max-width:100%;height:auto;display:block;margin:10px 0;" alt="Maintenance Image">
+                                                                                                                `).join('')}
+                                                                                                            </td>
+                                                                                                        </tr>
+                                                                                                        ` : ''}
                                                                                                         <tr>
                                                                                                             <td style="padding:25px;">
                                                                                                                 <table style="width:100%;margin:0 auto;border:0;border-spacing:0;text-align:left;">
