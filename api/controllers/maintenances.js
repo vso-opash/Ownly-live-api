@@ -4824,7 +4824,7 @@ function addMR(req, res) {
                                                                     to: mailOptions.to,
                                                                     subject: mailOptions.subject,
                                                                     text: mailOptions.subject,
-                                                                    html: mailOptions.html + '?roleId=' + Constant.TRADER
+                                                                    html: mailOptions.html
                                                                 }, function (error, response) {
                                                                     if (error) {
                                                                         console.log("Trader quote email error: ", error);
