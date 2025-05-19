@@ -2432,162 +2432,147 @@ function completeJob(req, res) {
 
 }
 
-function acceptorDeniedJob(req, res) {
-    console.log('req.body :: acceptorDeniedJob api ==============================> ', req.body);
-    var maintenance_id = (typeof req.body.maintenance_id != 'undefined') ? req.body.maintenance_id : '';
-    var req_status = (typeof req.body.req_status != 'undefined') ? req.body.req_status : '';  // 2 for accept and 7 for denied
+async function acceptorDeniedJob(req, res) {
+  console.log('req.body :: acceptorDeniedJob api ==============================> ', req.body);
+  const maintenance_id = req.body.maintenance_id || '';
+  const req_status = req.body.req_status || '';
+  const accepted_or_declined_by_role = req.body.accepted_or_declined_by_role || '';
 
-    // var status = (req_status == 2) ? 'Accept' : 'Denied';
-    var status = '';
-    if (req_status == 2) {
-        status = 'Accepted';
-    } else if (req_status == 3) {
-        status = 'Booked';
-    } else if (req_status == 7) {
-        status = 'Denined';
+  // Map req_status to human-readable status
+  let status = '';
+  if (req_status == 2) {
+    status = 'Accepted';
+  } else if (req_status == 3) {
+    status = 'Booked';
+  } else if (req_status == 7) {
+    status = 'Denied';
+  } else {
+    return res.json({ code: Constant.ERROR_CODE, message: 'Invalid req_status' });
+  }
+
+  if (!maintenance_id) {
+    return res.json({ code: Constant.ERROR_CODE, message: Constant.REQ_DATA_MISSING });
+  }
+
+  try {
+    // Fetch maintenance data
+    const data = await maintenances
+      .findById(mongoose.Types.ObjectId(maintenance_id))
+      .populate('property_id', 'property_name description address image')
+      .populate('created_by', 'firstname lastname image email')
+      .populate('trader_id', 'firstname lastname image email')
+      .populate('forwarded_by', 'firstname lastname image')
+      .exec();
+
+    if (!data) {
+      return res.json({ code: Constant.ERROR_CODE, message: 'Maintenance not found' });
     }
 
-    if (maintenance_id) {
+    // Prepare notification
+    const to_users = [];
+    if (data.forwarded_by && data.forwarded_by._id) {
+      to_users.push({ users_id: mongoose.Types.ObjectId(data.forwarded_by._id) });
+    }
+    if (data.created_by && data.created_by._id) {
+      to_users.push({ users_id: mongoose.Types.ObjectId(data.created_by._id) });
+    }
 
-        waterfall([
-            function (callback) {
-                maintenances.findById({ _id: mongoose.Types.ObjectId(maintenance_id) }).
-                    populate('property_id', 'property_name description address image')
-                    .populate('created_by', 'firstname lastname image')
-                    .populate('trader_id', 'firstname lastname image email')
-                    .populate('forwarded_by', 'firstname lastname image')
-                    .exec(function (err, data) {
-                        data = JSON.parse(JSON.stringify(data));
+    const notificationObj = {
+      subject: `${data.request_overview} has been ${status}`,
+      message: `${data.request_overview} for property at ${data.address} has been ${status} by ${data.trader_id ? data.trader_id.firstname + ' ' + data.trader_id.lastname : 'user'}`,
+      from_user: mongoose.Types.ObjectId(data.trader_id ? data.trader_id._id : data.created_by._id),
+      to_users,
+      type: Constant.NOTIFICATION_TYPE_MAINTENENCE_JOB_STATUS_CHANGED,
+      maintenence_id: data._id, // Note: Typo in variable name (maintenence_id vs maintenance_id)
+      module: 2,
+    };
 
-                        //Send Message to Traders for new maintenance request//
-                        if (err) {
-                            res.json({ code: Constant.SUCCESS_CODE, data: data });
-                        } else {
-                            console.log('data :: maintenance data => ', data);
-                            var to_users = [];
-                            var obj2 = {};
-                            // obj2.subject = "Job request " + data.request_id + " has been " + status;
-                            // obj2.message = "Job request " + data.request_id + " has been " + status + " by " + data.trader_id.firstname + " " + data.trader_id.lastname;
-                            obj2.subject = data.request_overview + " has been " + status;
-                            obj2.message = data.address;
-                            obj2.from_user = mongoose.Types.ObjectId(data.trader_id._id);
-                            if (data.forwarded_by && data.forwarded_by._id)
-                                to_users.push({ "users_id": mongoose.Types.ObjectId(data.forwarded_by._id) });
+    const notification = new NotificationInfo(notificationObj);
+    await notification.save();
 
-                            if (data.created_by && data.created_by._id)
-                                to_users.push({ "users_id": mongoose.Types.ObjectId(data.created_by._id) });
+    // Send emails if the action is performed by the owner
+    if (accepted_or_declined_by_role === Constant.OWNER && [2, 3, 7].includes(req_status)) {
+      const infoObj = {
+        maintenanceURL: `${Constant.STAGGING_URL}#!/maintance_detail/${req.body.maintenance_id}`,
+        traderName: data.trader_id ? `${data.trader_id.firstname} ${data.trader_id.lastname}` : '',
+        consumerName: data.created_by ? `${data.created_by.firstname} ${data.created_by.lastname}` : '',
+        requestOverview: data.request_overview || 'Maintenance Request',
+        jobAddress: data.address || 'N/A',
+        logoURL: Constant.STAGGING_URL + 'assets/images/logo-public-home.png',
+      };
 
-                            obj2.to_users = to_users;
-                            obj2.type = Constant.NOTIFICATION_TYPE_MAINTENENCE_JOB_STATUS_CHANGED;
-                            obj2.maintenence_id = data._id;
-                            obj2.module = 2;
-                            var notification = new NotificationInfo(obj2);
-                            notification.save(async function (err, notData) {
-                                if (err) {
-                                    callback(err);
-                                } else {
-                                    callback(null, true);
-                                    if (req.body.accepted_or_declined_by_role == Constant.OWNER) {
-                                        if (req_status == 2) {
-                                            console.log('owner accepted CP => ');
-                                            // send email for accepted CP
-                                            // consumer_accepts_CP_email
-                                            let infoObj = {
-                                                maintenanceURL: Constant.STAGGING_URL + '#!/maintance_detail/' + req.body.maintenance_id,
-                                                traderName: data.trader_id ? data.trader_id.firstname : '',
-                                                consumerName: data.created_by.firstname,
-                                            }
-                                            const options = {
-                                                from: Config.EMAIL_FROM, // sender address
-                                                // trader email
-                                                to: data.trader_id.email, // list of receivers
-                                                subject: 'Counter Proposal Accepted', // Subject line
-                                                text: 'Counter Proposal Accepted', // plaintext body
-                                            }
+      // Define email templates and subjects
+      let template, subject, traderSubject, consumerSubject;
+      if (req_status == 2) {
+        template = 'consumer_accepts_CP_email';
+        traderSubject = 'Counter Proposal Accepted';
+        consumerSubject = 'Your Maintenance Request Has Been Accepted';
+      } else if (req_status == 3) {
+        template = 'consumer_books_job_email';
+        traderSubject = 'Maintenance Request Booked';
+        consumerSubject = 'Your Maintenance Request Has Been Booked';
+      } else {
+        template = 'consumer_declines_CP_email';
+        traderSubject = 'Counter Proposal Denied';
+        consumerSubject = 'Your Maintenance Request Has Been Denied';
+      }
 
-                                            let mail_response = await mail_helper.sendEmail(options, 'consumer_accepts_CP_email', infoObj);
-
-                                        } else if (req_status == 7) {
-                                            console.log('owner declined CP => ');
-                                            // send email for decline CP
-                                            // consumer_declines_CP_email
-                                            let infoObj = {
-                                                maintenanceURL: Constant.STAGGING_URL + '#!/maintance_detail/' + req.body.maintenance_id,
-                                                traderName: data.trader_id ? data.trader_id.firstname : '',
-                                                consumerName: data.created_by.firstname,
-                                            }
-                                            const options = {
-                                                from: Config.EMAIL_FROM, // sender address
-                                                // trader email
-                                                to: data.trader_id.email, // list of receivers
-                                                subject: 'Counter Proposal Accepted', // Subject line
-                                                text: 'Counter Proposal Accepted', // plaintext body
-                                            }
-                                            let mail_response = await mail_helper.sendEmail(options, 'consumer_declines_CP_email', infoObj);
-
-                                        } else {
-                                            console.log('req_status != 2 or != 7 => ');
-                                        }
-                                    } else {
-                                        console.log('not owner user => ');
-                                    }
-
-
-                                }
-                            });
-                        }
-                    });
-            },
-            function (data1, callback) {
-                if (data1 == true && req_status == 2) {
-                    maintenances.update({ '_id': mongoose.Types.ObjectId(maintenance_id) },
-                        { $set: { 'req_status': req_status } }, function (err, value) {
-                            if (err) {
-                                res.json({ code: Constant.ERROR_CODE, message: Constant.INTERNAL_ERROR });
-                            } else {
-                                callback(null, value);
-                            }
-                        });
-                } else if (data1 == true && req_status == 7) {
-                    maintenances.update({ '_id': mongoose.Types.ObjectId(maintenance_id) },
-                        { $unset: { 'trader_id': "" } }, function (err, value) {
-                            if (err) {
-                                res.json({ code: Constant.ERROR_CODE, message: Constant.INTERNAL_ERROR });
-                            } else {
-                                maintenances.update({ '_id': mongoose.Types.ObjectId(maintenance_id) },
-                                    { $set: { 'req_status': 1, 'is_forward': false } }, function (err, value) {
-                                        if (err) {
-                                            res.json({ code: Constant.ERROR_CODE, message: Constant.INTERNAL_ERROR });
-                                        } else {
-                                            callback(null, value);
-                                        }
-                                    });
-                            }
-                        });
-                } else if (data1 == true && req_status == 3) {
-                    maintenances.update({ '_id': mongoose.Types.ObjectId(maintenance_id) },
-                        { $set: { 'req_status': req_status } }, function (err, value) {
-                            if (err) {
-                                res.json({ code: Constant.ERROR_CODE, message: Constant.INTERNAL_ERROR });
-                            } else {
-                                callback(null, value);
-                            }
-                        });
-                } else {
-                    callback(null, arg1);
-                }
-            },
-        ], function (err, result) {
-            if (err) {
-                res.json({ code: Constant.ERROR_CODE, message: Constant.INTERNAL_ERROR })
-            } else {
-                res.json({ code: Constant.SUCCESS_CODE, data: result });
-            }
+      // Send email to trader
+      if (data.trader_id && data.trader_id.email) {
+        const traderOptions = {
+          from: Config.EMAIL_FROM,
+          to: data.trader_id.email,
+          subject: traderSubject,
+          text: traderSubject,
+        };
+        await mail_helper.sendEmail(traderOptions, template, {
+          ...infoObj,
+          recipientName: infoObj.traderName,
         });
+      }
 
-    } else {
-        res.json({ code: Constant.ERROR_CODE, message: Constant.REQ_DATA_MISSING });
+      // Send email to consumer
+      if (data.created_by && data.created_by.email) {
+        const consumerOptions = {
+          from: Config.EMAIL_FROM,
+          to: data.created_by.email,
+          subject: consumerSubject,
+          text: consumerSubject,
+        };
+        await mail_helper.sendEmail(consumerOptions, template, {
+          ...infoObj,
+          recipientName: infoObj.consumerName,
+        });
+      }
     }
+
+    // Update maintenance status
+    if (req_status == 2 || req_status == 3) {
+      await maintenances.updateOne(
+        { _id: mongoose.Types.ObjectId(maintenance_id) },
+        { $set: { req_status } }
+      );
+    } else if (req_status == 7) {
+      await maintenances.updateOne(
+        { _id: mongoose.Types.ObjectId(maintenance_id) },
+        { $unset: { trader_id: '' }, $set: { req_status: 1, is_forward: false } }
+      );
+    }
+
+    // Fetch updated maintenance data for response
+    const updatedData = await maintenances
+      .findById(mongoose.Types.ObjectId(maintenance_id))
+      .populate('property_id', 'property_name description address image')
+      .populate('created_by', 'firstname lastname image email')
+      .populate('trader_id', 'firstname lastname image email')
+      .populate('forwarded_by', 'firstname lastname image')
+      .exec();
+
+    return res.json({ code: Constant.SUCCESS_CODE, data: updatedData });
+  } catch (err) {
+    console.error('Error in acceptorDeniedJob:', err);
+    return res.json({ code: Constant.ERROR_CODE, message: Constant.INTERNAL_ERROR });
+  }
 }
 
 function counterProposals(req, res) {

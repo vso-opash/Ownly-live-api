@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+    <title>Maintenance Request Booked</title>
+    <style>
+        @media only screen and (max-width: 600px) {
+            .container-table { width: 100% !important; max-width: 100% !important; }
+            .background-container { padding: 10px !important; }
+            .content-table { width: 100% !important; padding: 10px !important; }
+            img { max-width: 100% !important; height: auto !important; }
+        }
+    </style>
+</head>
+<body>
+    <table class="container-table" style="font-family:Roboto;max-width:800px;width:100%;border-radius:4px;margin:0 auto;border-spacing:0;background:#3b4856;">
+        <tr>
+            <td class="background-container" style="border:0;padding:20px 0;background:#3b4856;border-spacing:0;text-align:center;">
+                <table class="content-table" style="width:90%;margin-left:auto;margin-right:auto;border-spacing:0;border-radius:4px;background:#fff;border-radius:10px;border-spacing:0">
+                    <tr style="background:#142540;width:100%;height:100px;">
+                        <td style="padding:0;text-align:center;">
+                            <img src="<%=logoURL%>" style="max-width:100%;height:auto;display:block;margin:0 auto;" alt="Ownly Trade Brand Image">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:20px;text-align:left;">
+                            <table style="width:100%;margin:0;border-spacing:0;">
+                                <tr>
+                                    <td style="color:#7C888D;font-size:15px;line-height:normal;padding-bottom:20px;">
+                                        Dear <%= recipientName %>,
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="color:#7C888D;font-size:15px;line-height:normal;padding-bottom:40px;">
+                                        The maintenance request titled "<%= requestOverview %>" at <%= jobAddress %> has been <strong>booked</strong>.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="color:#2E4255;font-size:18px;font-weight:700;line-height:normal;padding:0;margin:0;">
+                                        Request Details<br><br>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <p style="padding-bottom:25px;margin:0;color:#7C888D;font-size:15px;font-style:italic;line-height:normal;font-weight:300;">
+                                            Address: <strong><%= jobAddress %></strong>
+                                        </p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="color:#2E4255;font-size:18px;font-weight:700;line-height:normal;padding:0;margin:0;">
+                                        <a target="_blank" href="<%= maintenanceURL %>" style="display:block;background:#2AA8D7;width:100px;line-height:28px;color:#fff;font-size:13px;border-radius:4px;text-decoration:none;text-align:center;margin-bottom:15px;">
+                                            View Request
+                                        </a><br><br><br>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="color:#7C888D;font-size:15px;line-height:normal;">
+                                        Thank you,
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="color:#7C888D;font-size:15px;line-height:normal;">
+                                        The Ownly Trade team!
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
