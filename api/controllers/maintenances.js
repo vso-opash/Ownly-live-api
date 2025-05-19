@@ -71,7 +71,7 @@ module.exports = {
     uploadMobileProposalImage: uploadMobileProposalImage,
     completeJob: completeJob,
     confirmDeclineCompleteJob: confirmDeclineCompleteJob,
-    acceptorDeniedJob: acceptorDeniedJob,
+    // acceptorDeniedJob: acceptorDeniedJob,
     propertyListForMaintenance: propertyListForMaintenance,
     counterProposals: counterProposals,
     acceptDeclineProposalRequest: acceptDeclineProposalRequest,
@@ -83,7 +83,10 @@ module.exports = {
     removeWatcher: removeWatcher,
     addMR: addMR,
     applyForQuote: applyForQuote,
-    hire_decline_trader: hire_decline_trader
+    hire_decline_trader: hire_decline_trader,
+    acceptorDeniedJob: function (req, res, next) {
+        acceptorDeniedJob(req, res).catch(next);
+    },
 };
 
 /*
