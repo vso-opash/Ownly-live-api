@@ -2662,7 +2662,12 @@ function counterProposals(req, res) {
                                         }
 
                                         let mail_response = await mail_helper.sendEmail(options, 'trader_sends_CP_email', infoObj);
-
+                                        // send message to owner for counter proposal
+                                         const sms_option = {
+                                            body: `Dear ${data.created_by.firstname}, ${data.trader_id.firstname} has sent you a counter proposal for the maintenance request. Please check more details on the provided link. ${Constant.STAGGING_URL}#/maintance_detail/${req.body.maintenance_id}`,
+                                            to: data.created_by.mobile_no,
+                                            }
+                                            await sms.sendmessage(sms_option)
 
                                     } else {
                                         console.log('CP by owner ::  DO not need to send Mail => ');

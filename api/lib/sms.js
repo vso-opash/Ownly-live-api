@@ -73,6 +73,7 @@ module.exports = {
   verification: verification,
   cronNotification: cronNotification,
   JobRequestMsg: JobRequestMsg,
+  sendmessage: sendmessage,
 }
 
 //client trial credential
