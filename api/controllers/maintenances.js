@@ -2496,7 +2496,7 @@ async function acceptorDeniedJob(req, res) {
     // Send emails if the action is performed by the owner
     if (accepted_or_declined_by_role === Constant.OWNER && [2, 3, 7].includes(req_status)) {
       const infoObj = {
-        maintenanceURL: `${Constant.STAGGING_URL}#!/maintance_detail/${req.body.maintenance_id}`,
+        maintenanceURL: `${Constant.STAGGING_URL}#!/maintance_detail/${req.body.maintenance_id}?roleId=${accepted_or_declined_by_role == Constant.OWNER ? Constant.OWNER : Constant.TRADER}`,
         traderName: data.trader_id ? `${data.trader_id.firstname} ${data.trader_id.lastname}` : '',
         consumerName: data.created_by ? `${data.created_by.firstname} ${data.created_by.lastname}` : '',
         requestOverview: data.request_overview || 'Maintenance Request',
@@ -2649,7 +2649,7 @@ function counterProposals(req, res) {
                                         console.log('CP by trader => ');
                                         // trader_sends_CP_email
                                         let infoObj = {
-                                            maintenanceURL: Constant.STAGGING_URL + '#!/maintance_detail/' + req.body.maintenance_id,
+                                            maintenanceURL: Constant.STAGGING_URL + '#!/maintance_detail/' + req.body.maintenance_id + '?roleId=' + Constant.OWNER,
                                             traderName: data.trader_id ? data.trader_id.firstname : '',
                                             consumerName: data.created_by.firstname,
                                         }
@@ -2664,7 +2664,7 @@ function counterProposals(req, res) {
                                         let mail_response = await mail_helper.sendEmail(options, 'trader_sends_CP_email', infoObj);
                                         // send message to owner for counter proposal
                                          const sms_option = {
-                                            body: `Dear ${data.created_by.firstname}, ${data.trader_id.firstname} has sent you a counter proposal for the maintenance request. Please check more details on the provided link.\n ${Constant.STAGGING_URL}#/maintance_detail/${req.body.maintenance_id} \nFrom Ownly`,
+                                            body: `Dear ${data.created_by.firstname}, ${data.trader_id.firstname} has sent you a counter proposal for the maintenance request. Please check more details on the provided link.\n ${Constant.STAGGING_URL}#/maintance_detail/${req.body.maintenance_id}?roleId=${Constant.OWNER} \nFrom Ownly`,
                                             to: data.created_by.mobile_no,
                                             }
                                             await sms.sendmessage(sms_option)
@@ -2672,7 +2672,7 @@ function counterProposals(req, res) {
                                     } else {
                                         console.log('CP by owner ::  DO not need to send Mail => ');
                                          let infoObj = {
-                                            maintenanceURL: Constant.STAGGING_URL + '#!/maintance_detail/' + req.body.maintenance_id,
+                                            maintenanceURL: Constant.STAGGING_URL + '#!/maintance_detail/' + req.body.maintenance_id + '?roleId=' + Constant.TRADER,
                                             traderName: data.trader_id ? data.trader_id.firstname : '',
                                             consumerName: data.created_by.firstname,
                                         }
@@ -2687,7 +2687,7 @@ function counterProposals(req, res) {
                                         let mail_response = await mail_helper.sendEmail(options, 'trader_sends_CP_email', infoObj);
                                         // send message to owner for counter proposal
                                          const sms_option = {
-                                            body: `Dear ${data.trader_id.firstname}, ${data.created_by.firstname} has sent you a counter proposal for the maintenance request. Please check more details on the provided link.\n ${Constant.STAGGING_URL}#/maintance_detail/${req.body.maintenance_id} \nFrom Ownly`,
+                                            body: `Dear ${data.trader_id.firstname}, ${data.created_by.firstname} has sent you a counter proposal for the maintenance request. Please check more details on the provided link.\n ${Constant.STAGGING_URL}#/maintance_detail/${req.body.maintenance_id}?roleId=${Constant.TRADER} \nFrom Ownly`,
                                             to: data.trader_id.mobile_no,
                                             }
                                             await sms.sendmessage(sms_option)
@@ -2949,7 +2949,7 @@ function acceptDeclineProposalRequest(req, res) {
                                                                 // send email for accepted CP
                                                                 // consumer_accepts_CP_email
                                                                 let infoObj = {
-                                                                    maintenanceURL: Constant.STAGGING_URL + '#!/maintance_detail/' + data._id,
+                                                                    maintenanceURL: Constant.STAGGING_URL + '#!/maintance_detail/' + data._id + '?roleId=' + req.body.accepted_or_declined_by_role,
                                                                     traderName: data.trader_id ? data.trader_id.firstname : '',
                                                                     consumerName: data.created_by.firstname,
                                                                 }
@@ -2968,7 +2968,7 @@ function acceptDeclineProposalRequest(req, res) {
                                                                 // send email for decline CP
                                                                 // consumer_declines_CP_email
                                                                 let infoObj = {
-                                                                    maintenanceURL: Constant.STAGGING_URL + '#!/maintance_detail/' + data._id,
+                                                                    maintenanceURL: Constant.STAGGING_URL + '#!/maintance_detail/' + data._id + '?roleId=' + req.body.accepted_or_declined_by_role,
                                                                     traderName: data.trader_id ? data.trader_id.firstname : '',
                                                                     consumerName: data.created_by.firstname,
                                                                 }
@@ -4450,7 +4450,7 @@ function addMR(req, res) {
                                                                                     </tr>
                                                                                     <tr>
                                                                                         <td style="color:#2E4255;font-size:18px;font-weight:700;line-height:normal;padding:0;margin:0;">
-                                                                                            <a target="_blank" href="${Constant.STAGGING_URL}#!/maintance_detail/${maintenance_id}" style="display:block;background:#2AA8D7;width:100px;line-height:28px;color:#fff;font-size:13px;border-radius:4px;text-decoration:none;text-align:center;margin-bottom:15px;">View Request</a><br><br><br>
+                                                                                            <a target="_blank" href="${Constant.STAGGING_URL}#!/maintance_detail/${maintenance_id}?roleId=${Constant.TRADER}" style="display:block;background:#2AA8D7;width:100px;line-height:28px;color:#fff;font-size:13px;border-radius:4px;text-decoration:none;text-align:center;margin-bottom:15px;">View Request</a><br><br><br>
                                                                                         </td>
                                                                                     </tr>
                                                                                     <tr>
@@ -4542,7 +4542,7 @@ function addMR(req, res) {
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td style="color:#2E4255;font-size:18px;font-weight:700;line-height:normal;padding:0;margin:0;">
-                                                                                        <a target="_blank" href="${Constant.STAGGING_URL}#!/maintance_detail/${maintenance_id}" style="display:block;background:#2AA8D7;width:100px;line-height:28px;color:#fff;font-size:13px;border-radius:4px;text-decoration:none;text-align:center;margin-bottom:15px;">View Request</a><br><br><br>
+                                                                                        <a target="_blank" href="${Constant.STAGGING_URL}#!/maintance_detail/${maintenance_id}?roleId=${Constant.OWNER}" style="display:block;background:#2AA8D7;width:100px;line-height:28px;color:#fff;font-size:13px;border-radius:4px;text-decoration:none;text-align:center;margin-bottom:15px;">View Request</a><br><br><br>
                                                                                     </td>
                                                                                 </tr>
                                                                                 <tr>
@@ -4705,7 +4705,7 @@ function addMR(req, res) {
                                     });
 
                                     if (trader_id && trader_id != '') {
-                                        var quote_link = Constant.STAGGING_URL + '#!/maintance_detail/' + maintenance_id;
+                                        var quote_link = Constant.STAGGING_URL + '#!/maintance_detail/' + maintenance_id + '?roleId=' + Constant.TRADER;
                                         var conditions = { 'is_deleted': false, '_id': mongoose.Types.ObjectId(trader_id) };
                                         if (category_id != '') {
                                             conditions.categories_id = mongoose.Types.ObjectId(category_id);
@@ -4847,7 +4847,7 @@ function addMR(req, res) {
                                                                             business_name: value.business_name,
                                                                             title: maintenanaceData.request_overview,
                                                                             budget: maintenanaceData.budget,
-                                                                            quote_link: quote_link + '?roleId=' + Constant.TRADER
+                                                                            quote_link: quote_link
                                                                         }
                                                                         console.log('maintenanaceData :: addMR=> ', maintenanaceData);
                                                                         console.log("Message sent: Successfully 2 ", mailOptions.to);
