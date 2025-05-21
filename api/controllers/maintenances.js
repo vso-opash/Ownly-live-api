@@ -2612,7 +2612,7 @@ function counterProposals(req, res) {
             } else {
                 maintenances.findById({ _id: proposalData.maintenance_id }).
                     populate('property_id', 'property_name description address image')
-                    .populate('created_by', 'firstname lastname image email')
+                    .populate('created_by', 'firstname lastname image email mobile_no')
                     .populate('trader_id', 'firstname lastname image')
                     .populate('forwarded_by', 'firstname lastname image')
                     //.populate('categories_id','name')
