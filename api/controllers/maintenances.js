@@ -2664,14 +2664,34 @@ function counterProposals(req, res) {
                                         let mail_response = await mail_helper.sendEmail(options, 'trader_sends_CP_email', infoObj);
                                         // send message to owner for counter proposal
                                          const sms_option = {
-                                            body: `Dear ${data.created_by.firstname}, ${data.trader_id.firstname} has sent you a counter proposal for the maintenance request. Please check more details on the provided link. ${Constant.STAGGING_URL}#/maintance_detail/${req.body.maintenance_id}`,
+                                            body: `Dear ${data.created_by.firstname}, ${data.trader_id.firstname} has sent you a counter proposal for the maintenance request. Please check more details on the provided link.\n ${Constant.STAGGING_URL}#/maintance_detail/${req.body.maintenance_id} \nFrom Ownly`,
                                             to: data.created_by.mobile_no,
                                             }
                                             await sms.sendmessage(sms_option)
 
                                     } else {
                                         console.log('CP by owner ::  DO not need to send Mail => ');
-                                        // DO not need to send Mail
+                                         let infoObj = {
+                                            maintenanceURL: Constant.STAGGING_URL + '#!/maintance_detail/' + req.body.maintenance_id,
+                                            traderName: data.trader_id ? data.trader_id.firstname : '',
+                                            consumerName: data.created_by.firstname,
+                                        }
+                                        const options = {
+                                            from: Config.EMAIL_FROM, // sender address
+                                            // owner email
+                                            to: data.trader_id.email, // list of receivers
+                                            subject: 'Counter Proposal', // Subject line
+                                            text: 'Counter Proposal', // plaintext body
+                                        }
+
+                                        let mail_response = await mail_helper.sendEmail(options, 'trader_sends_CP_email', infoObj);
+                                        // send message to owner for counter proposal
+                                         const sms_option = {
+                                            body: `Dear ${data.trader_id.firstname}, ${data.created_by.firstname} has sent you a counter proposal for the maintenance request. Please check more details on the provided link.\n ${Constant.STAGGING_URL}#/maintance_detail/${req.body.maintenance_id} \nFrom Ownly`,
+                                            to: data.trader_id.mobile_no,
+                                            }
+                                            await sms.sendmessage(sms_option)
+                                        
                                     }
 
                                     res.json({ code: Constant.SUCCESS_CODE, data: data, proposal_data: proposalData });
