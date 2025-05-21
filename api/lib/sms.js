@@ -57,7 +57,7 @@ function sendmessage(options) {
   client.messages.create(
     {
       to: validateNumber(options.to),
-      from: options.from,
+      from: Constant.SMS_FROM_NUMBER,
       body: options.body,
       mediaUrl: 'http://farm2.static.flickr.com/1075/1404618563_3ed9a44a3a.jpg',
     },
